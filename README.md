@@ -1,4 +1,4 @@
-Metar
-=====
+BUFR Tools
+==========
 
-Display metar from the command line.
+A suite of utilities and scripts to forge a BUFR file, or decode one.

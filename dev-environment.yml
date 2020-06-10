@@ -1,0 +1,9 @@
+name: bufrtools
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - flake8
+  - flake8-docstrings
+  - pytest
+

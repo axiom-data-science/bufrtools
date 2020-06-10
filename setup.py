@@ -21,18 +21,17 @@ def pip_requirements():
 
 
 setup(
-    name             = 'metar',
+    name             = 'bufrtools',
     version          = '0.0.1',
-    description      = 'A command line utility to display METAR data.',
+    description      = 'A suite of tools for working with BUFR',
     long_description = readme(),
     author           = 'Luke Campbell',
     author_email     = 'luke@axds.co',
-    url              = 'https://git.axiom/luke/metar',
+    url              = 'https://git.axiom/luke/bufrtools',
     packages         = find_packages(),
     install_requires = pip_requirements(),
     entry_points     = {
         'console_scripts': [
-            'metar = metar.cli:main',
         ],
     },
 )

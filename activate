@@ -1,0 +1,13 @@
+#!/usr/bin/zsh
+export PYTHONBREAKPOINT=ipdb.set_trac
+if [[ $(which python) == '/home/luke/venv/bin/python' ]]; then
+    deactivate
+fi
+
+which conda &> /dev/null
+if [[ $? != 0 ]]; then
+    start-conda
+fi
+
+export PATH=$PATH:/home/luke/code/eccodes-2.17.0-Source/release/bin
+conda activate bufrtools
