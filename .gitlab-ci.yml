@@ -7,6 +7,7 @@ test:
   stage: test
   script:
     - conda config --set always_yes yes
+    - conda config --append channels conda-forge
     - conda env create -f environment.yml
     - conda env update -f dev-environment.yml
     - source activate bufrtools
@@ -17,6 +18,7 @@ lint:
   stage: test
   script:
     - conda config --set always_yes yes
+    - conda config --append channels conda-forge
     - conda create --name flakeit python=3.8
     - conda install --name flakeit flake8 flake8-docstrings
     - source activate flakeit
