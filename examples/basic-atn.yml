@@ -1,0 +1,263 @@
+section1:
+  originating_centre: 65535
+  sub_centre: 65535
+  seq_no: 0
+  data_category: 1
+  # One-hour observations from automated station... ?
+  sub_category: 6
+  local_category: 255
+  master_table_version: 33
+  local_table_version: 255
+  year: 2020
+  month: 6
+  day: 10
+  hour: 15
+  minute: 0
+  second: 0
+section3:
+  number_of_subsets: 1
+  observed_flag: True
+  compressed_flag: False
+  descriptors:
+    - '315013'
+section4:
+  # 315013
+  # 301150 - WIGOS Identifier
+  # 001125 - WIGOS identrifier series
+  - bit_len: 0
+    fxy: '315013'
+    offset: null
+    scale: null
+    text: (Met-ocean observations from marine animal tags) (Sequence)
+    type: numeric
+  - bit_len: 0
+    fxy: '301150'
+    offset: null
+    scale: null
+    text: WIGOS identifier (Sequence)
+    type: numeric
+  - bit_len: 4
+    fxy: '001125'
+    offset: null
+    scale: null
+    text: WIGOS identifier series (Numeric)
+    type: numeric
+    value: 0
+  - bit_len: 16
+    fxy: '001126'
+    offset: null
+    scale: null
+    text: WIGOS issuer of identifier (Numeric)
+    type: numeric
+    value: 22002
+  - bit_len: 16
+    fxy: '001127'
+    offset: null
+    scale: null
+    text: WIGOS issue number (Numeric)
+    type: numeric
+    value: 0
+  - bit_len: 128
+    fxy: 001128
+    offset: null
+    scale: null
+    text: WIGOS local identifier (character) (CCITT IA5)
+    type: string
+    value: '37678'
+    # Platform identification
+  - bit_len: 23
+    fxy: 001087
+    offset: null
+    scale: null
+    text: WMO marine observing platform extended identifier (Numeric)
+    type: numeric
+    value: 37678
+  - bit_len: 0
+    fxy: '208032'
+    offset: null
+    scale: null
+    text: Change width of CCITT IA5 field (Operator)
+    type: operator
+  - bit_len: 256
+    fxy: 1020
+    offset: null
+    scale: null
+    text: Long station or site name (CCITT IA5)
+    type: string
+    value: 'ct145-933-BAT2-19'
+  - bit_len: 0
+    fxy: '208000'
+    offset: null
+    scale: null
+    text: Change width of CCITT IA5 field (Operator)
+    type: operator
+
+    # Station type should always be 5 (Animal)
+  - bit_len: 5
+    fxy: '003001'
+    offset: null
+    scale: null
+    text: Surface Station Type (Code table)
+    type: numeric
+    value: 5
+    # Always set to 995 marine animal
+  - bit_len: 10
+    fxy: '022067'
+    offset: null
+    scale: null
+    text: Instrument type for water temperature/salinity profile measurement (Code table)
+    type: numeric
+    value: 995
+
+    # Profile data
+  - bit_len: 0
+    fxy: '114000'
+    offset: null
+    scale: null
+    text: Delayed replication of 14 descriptors (Replication)
+    type: numeric
+  - bit_len: 8
+    fxy: '031001'
+    offset: null
+    scale: null
+    text: Delayed descriptor replication factor (Numeric)
+    type: numeric
+    value: 1 # Only show one profile
+  - bit_len: 5
+    fxy: 008021
+    offset: null
+    scale: null
+    text: Time significance (Code table)
+    type: numeric
+    value: 26 # Time of last known position
+  - bit_len: 0
+    fxy: '301011'
+    offset: null
+    scale: null
+    text: (Year, month, day) (Sequence)
+    type: numeric
+  - bit_len: 12
+    fxy: '004001'
+    offset: null
+    scale: null
+    text: Year (a)
+    type: numeric
+    value: 2020
+  - bit_len: 4
+    fxy: '004002'
+    offset: null
+    scale: null
+    text: Month (mon)
+    type: numeric
+    value: 6
+  - bit_len: 6
+    fxy: '004003'
+    offset: null
+    scale: null
+    text: Day (d)
+    type: numeric
+    value: 10
+  - bit_len: 0
+    fxy: '301012'
+    offset: null
+    scale: null
+    text: (Hour, minute) (Sequence)
+    type: numeric
+  - bit_len: 5
+    fxy: '004004'
+    offset: null
+    scale: null
+    text: Hour (h)
+    type: numeric
+    value: 20
+  - bit_len: 6
+    fxy: '004005'
+    offset: null
+    scale: null
+    text: Minute (min)
+    type: numeric
+    value: 21
+  - bit_len: 0
+    fxy: '301021'
+    offset: null
+    scale: null
+    text: (Latitude / longitude (high accurracy)) (Sequence)
+    type: numeric
+  - bit_len: 25
+    fxy: '005001'
+    offset: -9000000.0
+    scale: 5.0
+    text: Latitude (high accuracy) (deg)
+    type: numeric
+    value: 41.722
+  - bit_len: 26
+    fxy: '006001'
+    offset: -18000000.0
+    scale: 5.0
+    text: Longitude (high accuracy) (deg)
+    type: numeric
+    value: -71.4277
+  - bit_len: 96
+    fxy: '001051'
+    offset: null
+    scale: null
+    text: Platform Transmitter ID number (CCITT IA5)
+    type: string
+    value: 'PTT'
+  - bit_len: 5
+    fxy: 002148
+    offset: null
+    scale: null
+    text: Data collection and/or location system (Code table)
+    type: numeric
+    value: 1 # ARGOS
+  - bit_len: 9
+    fxy: '001012'
+    offset: null
+    scale: null
+    text: Direction of motion of moving observing platform (degree true)
+    type: numeric
+    value: 272
+  - bit_len: 10
+    fxy: '001014'
+    offset: null
+    scale: 2.0
+    text: Platform drift speed (high precision) (m/s)
+    type: numeric
+    value: 1.5
+  - bit_len: 2
+    fxy: '033022'
+    offset: null
+    scale: null
+    text: Quality of buoy satellite transmission (Code table)
+    type: numeric
+    value: 0 # good
+  - bit_len: 2
+    fxy: '033023'
+    offset: null
+    scale: null
+    text: Quality of buoy location (Code table)
+    type: numeric
+    value: 0 # good
+  - bit_len: 3
+    fxy: '033027'
+    offset: null
+    scale: null
+    text: Location quality class (range of radius of 66% confidence) (Code table)
+    type: numeric
+    value: 0
+  - bit_len: 20
+    fxy: '007063'
+    offset: null
+    scale: 2.0
+    text: Depth below sea/water surface (m)
+    type: numeric
+    value: 2.0
+  - bit_len: 19
+    fxy: '022045'
+    offset: null
+    scale: 3.0
+    text: Sea / Water Temperature (K)
+    type: numeric
+    value: 278.4
+
