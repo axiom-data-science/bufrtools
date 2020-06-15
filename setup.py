@@ -34,6 +34,9 @@ setup(
         'console_scripts': [
         ],
     },
+    package_data     = {
+        'bufrtools.tables' : ['data/*.csv'],
+    },
 )
 
 

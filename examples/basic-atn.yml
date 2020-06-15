@@ -260,4 +260,221 @@ section4:
     text: Sea / Water Temperature (K)
     type: numeric
     value: 278.4
+  - bit_len: 5
+    fxy: 008021
+    offset: null
+    scale: null
+    text: Time significance (Code table)
+    type: numeric
+    value: 31 # Missing
+    # Profile data
+  - bit_len: 0
+    fxy: '107000'
+    offset: null
+    scale: null
+    text: Delayed replication of 7 descriptors (Replication)
+    type: numeric
+  - bit_len: 8
+    fxy: '031001'
+    offset: null
+    scale: null
+    text: Delayed descriptor replication factor (Numeric)
+    type: numeric
+    value: 1
+  - bit_len: 0
+    fxy: '301011'
+    offset: null
+    scale: null
+    text: (Year, month, day) (Sequence)
+    type: numeric
+  - bit_len: 12
+    fxy: '004001'
+    offset: null
+    scale: null
+    text: Year (a)
+    type: numeric
+    value: 2020
+  - bit_len: 4
+    fxy: '004002'
+    offset: null
+    scale: null
+    text: Month (mon)
+    type: numeric
+    value: 6
+  - bit_len: 6
+    fxy: '004003'
+    offset: null
+    scale: null
+    text: Day (d)
+    type: numeric
+    value: 11
+  - bit_len: 0
+    fxy: '301012'
+    offset: null
+    scale: null
+    text: (Hour, minute) (Sequence)
+    type: numeric
+  - bit_len: 5
+    fxy: '004004'
+    offset: null
+    scale: null
+    text: Hour (h)
+    type: numeric
+    value: 13
+  - bit_len: 6
+    fxy: '004005'
+    offset: null
+    scale: null
+    text: Minute (min)
+    type: numeric
+    value: 46
 
+  - bit_len: 0
+    fxy: '301021'
+    offset: null
+    scale: null
+    text: (Latitude / longitude (high accurracy)) (Sequence)
+    type: numeric
+  - bit_len: 25
+    fxy: '005001'
+    offset: -9000000.0
+    scale: 5.0
+    text: Latitude (high accuracy) (deg)
+    type: numeric
+    value: 41.722
+  - bit_len: 26
+    fxy: '006001'
+    offset: -18000000.0
+    scale: 5.0
+    text: Longitude (high accuracy) (deg)
+    type: numeric
+    value: -71.4277
+
+  - bit_len: 64
+    fxy: 001079
+    offset: null
+    scale: null
+    text: Unique identifier for the profile (CCITT IA5)
+    type: string
+    value: profile1
+
+  - bit_len: 9
+    fxy: '001023'
+    offset: null
+    scale: null
+    text: Observation sequence number (Numeric)
+    type: numeric
+    value: 0
+
+  - bit_len: 2
+    fxy: '022056'
+    offset: null
+    scale: null
+    text: Direction of profile (Code table)
+    type: numeric
+    value: 1 # Downwards profile
+  - bit_len: 0
+    fxy: '306035'
+    offset: null
+    scale: null
+    text: Temperature and salinity profile (Sequence)
+    type: numeric
+  - bit_len: 0
+    fxy: '112000'
+    offset: null
+    scale: null
+    text: Delayed replication of 12 descriptors (Replication)
+    type: numeric
+  - bit_len: 16
+    fxy: '031002'
+    offset: null
+    scale: null
+    text: Extended delayed descriptor replication factor (Numeric)
+    type: numeric
+    value: 1
+  - bit_len: 17
+    fxy: '007062'
+    offset: null
+    scale: 1.0
+    text: Depth below sea/water surface (m)
+    type: numeric
+    value: 2
+  - bit_len: 6
+    fxy: '008080'
+    offset: null
+    scale: null
+    text: Qualifier for GTSPP quality flag (Code table)
+    type: numeric
+    value: 13 # Water Depth
+    # NOTE: This one specifies what parameter it is?
+  - bit_len: 4
+    fxy: '033050'
+    offset: null
+    scale: null
+    text: Global GTSPP quality flag (Code table)
+    type: numeric
+    value: 1 # Correct
+    # QAQC Value
+  - bit_len: 17
+    fxy: '007065'
+    offset: null
+    scale: -3.0
+    text: Water pressure (Pa)
+    type: numeric
+    value: 20000.
+  - bit_len: 6
+    fxy: 008080
+    offset: null
+    scale: null
+    text: Qualifier for GTSPP quality flag (Code table)
+    type: numeric
+    value: 10 # Water pressure at a level
+  - bit_len: 4
+    fxy: '033050'
+    offset: null
+    scale: null
+    text: Global GTSPP quality flag (Code table)
+    type: numeric
+    value: 1 # Correct
+  - bit_len: 15
+    fxy: '022043'
+    offset: null
+    scale: 2.0
+    text: Sea/water temperature (K)
+    type: numeric
+    value: 284.34
+  - bit_len: 6
+    fxy: 008080
+    offset: null
+    scale: null
+    text: Qualifier for GTSPP quality flag (Code table)
+    type: numeric
+    value: 11 # Water temperature at a level
+  - bit_len: 4
+    fxy: '033050'
+    offset: null
+    scale: null
+    text: Global GTSPP quality flag (Code table)
+    type: numeric
+    value: 1 # Correct
+  - bit_len: 17
+    fxy: '022064'
+    offset: null
+    scale: 3.0
+    text: Salinity (0/00)
+    type: numeric
+    value: 33.2
+  - bit_len: 6
+    fxy: 008080
+    offset: null
+    scale: null
+    text: Qualifier for GTSPP quality flag (Code table)
+    type: numeric
+    value: 12 # Salinity at a level
+  - bit_len: 4
+    fxy: '033050'
+    offset: null
+    scale: null
+    text: Global GTSPP quality flag (Code table)
+    type: numeric
+    value: 1 # Correct

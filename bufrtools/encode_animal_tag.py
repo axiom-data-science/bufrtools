@@ -1,14 +1,22 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 """Translates a JSON BUFR Message description for Animal Tags to a BUFR file."""
+from pathlib import Path
+from argparse import ArgumentParser
 from bufrtools.util.bitmath import shift_uint, encode_uint
+from bufrtools.util.parse import parse_ref
 import io
 import math
+import yaml
+import json
+import sys
+import pandas as pd
 
 
 def encode_bufr(message: dict, context: dict):
     """Encodes a BUFR file based on the contents of message."""
-    context['buf'] = io.BytesIO()
+    if 'buf' not in context:
+        context['buf'] = io.BytesIO()
     buf = context['buf']
     encode_section0(message, context)
     encode_section1(message, context)
@@ -137,7 +145,7 @@ def encode_section4(message: dict, context: dict):
             bitlen = seq['bit_len']
             if override_bitlength:
                 bitlen = override_bitlength
-            value = seq['value']
+            value = float(seq['value'])
             if seq['scale']:
                 value = value * math.pow(10, seq['scale'])
             if seq['offset']:
@@ -184,21 +192,47 @@ def write_ascii(buf, data, bit_offset, bitlen):
         write_uint(buf, value, bit_offset + (i * 8), 8)
 
 
-def parse_ref(fxy) -> tuple:
-    """Returns a tuple of the FXXYYYY string parsed out into integers."""
-    f = int(fxy[0])
-    x = int(fxy[1:3])
-    y = int(fxy[3:6])
-    return f, x, y
+def main():
+    """To fill out at some point."""
+    parser = ArgumentParser(description=main.__doc__)
+    parser.add_argument('-o',
+                        '--output',
+                        default='output.bufr',
+                        type=Path,
+                        help='Filename to output to.')
+    parser.add_argument('-d', '--data', type=Path, help='Data (CSV, JSON, YAML)')
+    parser.add_argument('descriptor',
+                        type=Path,
+                        help='A YAML or JSON file describing the message\'s global attributes.')
+    args = parser.parse_args()
+
+    descriptor = args.descriptor
+    if descriptor.suffix == '.yml':
+        msg = yaml.safe_load(descriptor.read_text('utf-8'))
+    elif descriptor.suffix == '.json':
+        msg = json.loads(descriptor.read_text('utf-8'))
+    else:
+        raise ValueError(f'Unknown descriptor format: {descriptor.suffix}')
+
+    if args.data:
+        if args.data.suffix == '.csv':
+            df = pd.read_csv(args.data, dtype={'fxy': str, 'value': str})
+            section4 = df.to_dict(orient='records')
+        elif args.data.suffix == '.json':
+            section4 = json.loads(args.data.read_text('utf-8'))
+        elif args.data.suffix == '.yml':
+            section4 = yaml.load_safe(args.data.read_text('utf-8'))
+        else:
+            raise ValueError(f'Unknown data format: {args.data.suffix}')
+        msg['section4'] = section4
+
+    context = {}
+    encode_bufr(msg, context)
+    buf = context['buf']
+    buf.seek(0)
+    args.output.write_bytes(buf.read())
+    return 0
 
 
 if __name__ == '__main__':
-    import yaml
-    from pathlib import Path
-    msg = yaml.safe_load(Path('examples/basic-atn.yml').read_text('utf-8'))
-    context = {}
-    encode_bufr(msg, context)
-    output = Path('output.bufr')
-    buf = context['buf']
-    buf.seek(0)
-    output.write_bytes(buf.read())
+    sys.exit(main())
