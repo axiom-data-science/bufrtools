@@ -11,6 +11,7 @@ import yaml
 import json
 import sys
 import pandas as pd
+import numpy as np
 
 
 def encode_bufr(message: dict, context: dict):
@@ -216,7 +217,7 @@ def main():
 
     if args.data:
         if args.data.suffix == '.csv':
-            df = pd.read_csv(args.data, dtype={'fxy': str, 'value': str})
+            df = pd.read_csv(args.data, dtype={'fxy': str, 'value': str, 'bit_len': np.uint16})
             section4 = df.to_dict(orient='records')
         elif args.data.suffix == '.json':
             section4 = json.loads(args.data.read_text('utf-8'))

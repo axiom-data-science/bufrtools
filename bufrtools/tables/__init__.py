@@ -5,16 +5,56 @@ from bufrtools.util.parse import parse_ref
 import pandas as pd
 import pkg_resources
 import numpy as np
+import csv
+import codecs
+import copy
 
 
-def get_code_table(fxy_str: str) -> pd.DataFrame:
+def get_code_table(fxy_str: str, code_figure: int) -> pd.DataFrame:
     """Returns the code table for the given FXXYYY string."""
     f, x, y = parse_ref(fxy_str)
     filename = f'BUFRCREX_CodeFlag_en_{x:02d}.csv'
-    stream = pkg_resources.resource_stream('bufrtools.tables', f'data/{filename}')
-    df = pd.read_csv(stream, dtype={'FXY': str})
-    df = df[df['FXY'] == fxy_str]
+    utf8_reader = codecs.getreader('utf-8')
+    with pkg_resources.resource_stream('bufrtools.tables', f'data/{filename}') as f:
+        reader = csv.DictReader(utf8_reader(f))
+        rows = []
+        for row in reader:
+            if fxy_str != row['FXY']:
+                continue
+            if '-' in row['CodeFigure']:
+                start, end = (int(i) for i in row['CodeFigure'].split('-'))
+                for i in range(start, end + 1):
+                    enumerated_row = copy.copy(row)
+                    enumerated_row['CodeFigure'] = i
+                    rows.append(enumerated_row)
+            else:
+                rows.append(row)
+    df = pd.DataFrame(rows)
+    df = df.astype({'CodeFigure': np.uint16})
     return df
+
+
+def get_code_table_figure(fxy_str: str, code_figure: int) -> dict:
+    """Returns the code table row for the given FXXYYY string."""
+    f, x, y = parse_ref(fxy_str)
+    filename = f'BUFRCREX_CodeFlag_en_{x:02d}.csv'
+    utf8_reader = codecs.getreader('utf-8')
+    with pkg_resources.resource_stream('bufrtools.tables', f'data/{filename}') as f:
+        reader = csv.DictReader(utf8_reader(f))
+        for row in reader:
+            if fxy_str != row['FXY']:
+                continue
+            if '-' in row['CodeFigure']:
+                start, end = (int(i) for i in row['CodeFigure'].split('-'))
+                if start <= code_figure and code_figure <= end:
+                    return row
+            else:
+                try:
+                    val = int(row['CodeFigure'])
+                    if val == code_figure:
+                        return row
+                except ValueError:
+                    pass
 
 
 def get_summary(fxy_str: str) -> pd.DataFrame:
@@ -66,6 +106,14 @@ def get_sequence_description(fxy_str: str) -> pd.DataFrame:
     return summary
 
 
+def get_table_a() -> pd.DataFrame:
+    """Returns the Table A contents."""
+    filename = 'BUFR_TableA_en.csv'
+    stream = pkg_resources.resource_stream('bufrtools.tables', f'data/{filename}')
+    df = pd.read_csv(stream)
+    return df
+
+
 def get_table_d(f, x, y) -> pd.DataFrame:
     """Returns the contents of the Table D for the given FXXYYY string."""
     assert f == 3
@@ -86,6 +134,13 @@ def get_table_b(f, x, y) -> pd.DataFrame:
     df = pd.read_csv(stream, dtype={'FXY': str})
     df = df[df['FXY'] == fxy_str]
     return df
+
+
+def table_a_lookup(code_figure: int) -> dict:
+    """Returns the data for a given table a code figure."""
+    df = get_table_a()
+    rec = df.loc[code_figure]
+    return rec.to_dict()
 
 
 def table_d_lookup(f, x, y, parent=None):

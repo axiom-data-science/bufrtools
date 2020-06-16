@@ -300,14 +300,14 @@ Category,CategoryOfSequences_en,FXY1,Title_en,SubTitle_en,FXY2,ElementName_en,El
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,208000,Change width of CCITT IA5 field,Cancel change width,,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,003001,Surface Station Type,11 (Marine Animal),,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,022067,Instrument type for water temperature/salinity profile measurement,Set to 995 (attached to marine animal),,Operational
-15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,114000,Delayed replication of 14 descriptors,,,Operational
+15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,001051,Platform Transmitter ID number,e.g. Argos PTT,,Operational
+15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,002148,Data collection and/or location system,,,Operational
+15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,112000,Delayed replication of 12 descriptors,,,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,031001,Delayed descriptor replication factor,,,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,008021,Time significance,"set to 26, time of last known position",,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,301011,"(Year, month, day)",,,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,301012,"(Hour, minute)",,,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,301021,(Latitude / longitude (high accurracy)),,,Operational
-15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,001051,Platform Transmitter ID number,e.g. Argos PTT,,Operational
-15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,002148,Data collection and/or location system,,,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,001012,Direction of motion of moving observing platform,,,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,001014,Platform drift speed (high precision),,,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,033022,Quality of buoy satellite transmission,,,Operational
