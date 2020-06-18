@@ -12,17 +12,25 @@ import json
 import sys
 import pandas as pd
 import numpy as np
+import os
 
 
 def encode_bufr(message: dict, context: dict):
     """Encodes a BUFR file based on the contents of message."""
     if 'buf' not in context:
         context['buf'] = io.BytesIO()
-    buf = context['buf']
     encode_section0(message, context)
     encode_section1(message, context)
     encode_section3(message, context)
     encode_section4(message, context)
+    encode_section5(context)
+    finalize_bufr(context)
+
+
+def finalize_bufr(context: dict):
+    """Finalizes the BUFR message by writing the total size."""
+    buf = context['buf']
+    buf.seek(0, os.SEEK_END)
     total_len = buf.tell()
     buf.seek(4)
     total_len_b = shift_uint(total_len, 24, 0, 24)
@@ -170,6 +178,12 @@ def encode_section4(message: dict, context: dict):
     buf.seek(start)
     buf.write(section_len_b)
     buf.seek(end)
+
+
+def encode_section5(context: dict):
+    """Encodes section 5 into the Byte buffer."""
+    buf = context['buf']
+    buf.write(b'7777')
 
 
 def write_uint(buf, value, bit_offset, bitlen):

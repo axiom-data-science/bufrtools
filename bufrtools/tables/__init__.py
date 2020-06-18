@@ -10,7 +10,7 @@ import codecs
 import copy
 
 
-def get_code_table(fxy_str: str, code_figure: int) -> pd.DataFrame:
+def get_code_table(fxy_str: str) -> pd.DataFrame:
     """Returns the code table for the given FXXYYY string."""
     f, x, y = parse_ref(fxy_str)
     filename = f'BUFRCREX_CodeFlag_en_{x:02d}.csv'

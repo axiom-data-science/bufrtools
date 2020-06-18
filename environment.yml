@@ -2,6 +2,8 @@ name: bufrtools
 channels:
   - conda-forge
   - defaults
+  - axiom-data-science
 dependencies:
   - pyyaml
   - pandas
+  - pocean-core>=1.9.3
