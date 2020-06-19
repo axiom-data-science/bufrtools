@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 """Unit tests for wildlife computers encoders."""
 import numpy as np
-from bufrtools.encoding.wildlife_computers import haversine_distance, azimuth
+from bufrtools.util.gis import haversine_distance, azimuth
 
 
 def test_haversin_distance():

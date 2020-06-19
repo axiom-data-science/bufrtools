@@ -159,7 +159,8 @@ def encode_section4(message: dict, context: dict):
                 value = value * math.pow(10, seq['scale'])
             if seq['offset']:
                 value = value - seq['offset']
-            value = int(value)
+            # The value should be ROUNDED to the nearest integer
+            value = int(np.round(value))
             write_uint(write_buf, value, bit_offset, bitlen)
             bit_offset += seq['bit_len']
         elif seq['type'] == 'string':

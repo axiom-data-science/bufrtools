@@ -1,3 +1,3 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-"""Unit tests package for encoders."""
+"""Utlity unit tests package."""
