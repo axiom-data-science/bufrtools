@@ -74,6 +74,7 @@ def haversine_distance(x, y, r=6378137.):
 
     Returns:
         np.ndarray: Distances in the units of r.
+
     """
     dx = np.diff(x)
     dy = np.diff(y)
@@ -107,6 +108,7 @@ def azimuth(x, y):
 
     Returns:
         np.ndarray: Angles of azimuth.
+
     """
     theta = np.zeros_like(x)
     dx = np.diff(x)
