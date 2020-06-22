@@ -14,7 +14,7 @@ import pocean.dsg  # noqa Import required for CFDataset
 from pocean.cf import CFDataset
 from datetime import datetime
 from bufrtools.tables import get_sequence_description
-from bufrtools import encode_animal_tag as encoder
+from bufrtools.encoding import bufr as encoder
 from typing import List
 from argparse import ArgumentParser, Namespace
 from bufrtools.util.gis import haversine_distance, azimuth
