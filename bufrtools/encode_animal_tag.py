@@ -2,9 +2,10 @@
 #-*- coding: utf-8 -*-
 """Translates a JSON BUFR Message description for Animal Tags to a BUFR file."""
 from pathlib import Path
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from bufrtools.util.bitmath import shift_uint, encode_uint
 from bufrtools.util.parse import parse_ref
+from typing import List
 import io
 import math
 import yaml
@@ -208,8 +209,8 @@ def write_ascii(buf, data, bit_offset, bitlen):
         write_uint(buf, value, bit_offset + (i * 8), 8)
 
 
-def main():
-    """To fill out at some point."""
+def parse_args(argv: List[str]) -> Namespace:
+    """Returns an argument namespace argument parsed from the command line arguments."""
     parser = ArgumentParser(description=main.__doc__)
     parser.add_argument('-o',
                         '--output',
@@ -220,8 +221,13 @@ def main():
     parser.add_argument('descriptor',
                         type=Path,
                         help='A YAML or JSON file describing the message\'s global attributes.')
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+    return args
 
+
+def main():
+    """To fill out at some point."""
+    args = parse_args(sys.argv[1:])
     descriptor = args.descriptor
     if descriptor.suffix == '.yml':
         msg = yaml.safe_load(descriptor.read_text('utf-8'))

@@ -16,7 +16,7 @@ from datetime import datetime
 from bufrtools.tables import get_sequence_description
 from bufrtools import encode_animal_tag as encoder
 from typing import List
-from argparse import ArgumentParser
+from argparse import ArgumentParser, Namespace
 from bufrtools.util.gis import haversine_distance, azimuth
 
 
@@ -282,8 +282,8 @@ def encode(profile_dataset: Path, output: Path):
     output.write_bytes(buf.read())
 
 
-def main():
-    """Encode a wildlife computers profile."""
+def parse_args(argv) -> Namespace:
+    """Returns the namespace parsed from the command line arguments."""
     parser = ArgumentParser(description=main.__doc__)
     parser.add_argument('-o',
                         '--output',
@@ -291,7 +291,13 @@ def main():
                         default=Path('output.bufr'), help='Output file')
     parser.add_argument('profile_dataset', type=Path, help='ATN Wildlife Comptuers profile netCDF')
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+    return args
+
+
+def main():
+    """Encode a wildlife computers profile."""
+    args = parse_args(sys.argv[1:])
 
     assert args.profile_dataset.exists()
     encode(args.profile_dataset, args.output)
