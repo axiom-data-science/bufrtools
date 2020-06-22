@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 """Package for dealing with BUFR tables."""
-from bufrtools.util.parse import parse_ref
-import pandas as pd
-import pkg_resources
-import numpy as np
 import csv
-import codecs
 import copy
+import codecs
+
+import pkg_resources
+
+import numpy as np
+import pandas as pd
+from bufrtools.util.parse import parse_ref
 
 
 def get_code_table(fxy_str: str) -> pd.DataFrame:

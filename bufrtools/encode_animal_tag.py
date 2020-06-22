@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 """Translates a JSON BUFR Message description for Animal Tags to a BUFR file."""
-from pathlib import Path
-from argparse import ArgumentParser, Namespace
-from bufrtools.encoding.bufr import encode_bufr
-from typing import List
-import yaml
-import json
 import sys
-import pandas as pd
+import json
+from typing import List
+from pathlib import Path
+from argparse import Namespace, ArgumentParser
+
+import yaml
 import numpy as np
+import pandas as pd
+from bufrtools.encoding.bufr import encode_bufr
 
 
 def parse_args(argv: List[str]) -> Namespace:

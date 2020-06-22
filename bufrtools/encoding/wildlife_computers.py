@@ -3,21 +3,22 @@
 """Encoding support for wildlife computers netCDF."""
 
 
-import numpy as np
-import pandas as pd
-import cftime
-import sys
 import io
+import sys
+from typing import List
 from pathlib import Path
+from argparse import Namespace, ArgumentParser
+from datetime import datetime
+
+import numpy as np
+import cftime
+import pandas as pd
 import pocean  # noqa Import required for CFDataset
 import pocean.dsg  # noqa Import required for CFDataset
 from pocean.cf import CFDataset
-from datetime import datetime
 from bufrtools.tables import get_sequence_description
 from bufrtools.encoding import bufr as encoder
-from typing import List
-from argparse import ArgumentParser, Namespace
-from bufrtools.util.gis import haversine_distance, azimuth
+from bufrtools.util.gis import azimuth, haversine_distance
 
 
 def get_section1() -> dict:

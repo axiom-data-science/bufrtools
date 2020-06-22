@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 """Package for some decoding utilities."""
-from bufrtools.tables import get_code_table_figure
 import logging
+
+from bufrtools.tables import get_code_table_figure
 
 log = logging.getLogger(__name__)
 

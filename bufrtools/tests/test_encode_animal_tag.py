@@ -1,15 +1,16 @@
 #!/usr/bin/env pytest
 #-*- coding: utf-8 -*-
 """Integration tests for encoding an animal tag."""
-import bufrtools
-from bufrtools import encode_animal_tag
-from bufrtools import decoding
+import os
+import tempfile
 from pathlib import Path
 from argparse import Namespace
 from unittest.mock import patch
-import tempfile
-import os
+
 import pytest
+
+import bufrtools
+from bufrtools import decoding, encode_animal_tag
 
 
 def get_example_path(example_name: str) -> Path:

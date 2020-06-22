@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 """Module for common BUFR encoding functions."""
-from bufrtools.util.bitmath import shift_uint, encode_uint
-from bufrtools.util.parse import parse_ref
 import io
-import math
-import numpy as np
 import os
+import math
+
+import numpy as np
+from bufrtools.util.parse import parse_ref
+from bufrtools.util.bitmath import shift_uint, encode_uint
 
 
 def encode_bufr(message: dict, context: dict):
@@ -200,5 +201,3 @@ def write_ascii(buf, data, bit_offset, bitlen):
     ascii_encoded = data.rjust(bitlen // 8).encode('ascii')
     for i, value in enumerate(ascii_encoded):
         write_uint(buf, value, bit_offset + (i * 8), 8)
-
-

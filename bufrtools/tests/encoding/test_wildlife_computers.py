@@ -1,15 +1,17 @@
 #!/usr/bin/env pytest
 #-*- coding: utf-8 -*-
 """Unit tests for wildlife computers."""
-from bufrtools import decoding
-from bufrtools.encoding import wildlife_computers
-from pathlib import Path
 import os
 import tempfile
-import bufrtools
-import pytest
-from unittest.mock import patch
+from pathlib import Path
 from argparse import Namespace
+from unittest.mock import patch
+
+import pytest
+
+import bufrtools
+from bufrtools import decoding
+from bufrtools.encoding import wildlife_computers
 
 
 def get_example_path(example_name: str) -> Path:
