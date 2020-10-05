@@ -35,9 +35,8 @@ python bufrtools/encoding/wildlife_computers.py -o <output bufr file> <netCDF pa
 The following table contains the expanded sequence of descriptors for temperature salinity profiles
 and trajectories originating from marine animal tags.
 
-+--------+--------+---------------------------------------------------------------------------------+----------------------------------------------------+
 | parent | fxy    | text                                                                            | Subtitle                                           |
-+--------+--------+---------------------------------------------------------------------------------+----------------------------------------------------+
+|--------|--------|---------------------------------------------------------------------------------|----------------------------------------------------|
 | 315013 | 315013 | (Met-ocean observations from marine animal tags) (Sequence)                     |                                                    |
 | 315013 | 301150 | WIGOS identifier (Sequence)                                                     |                                                    |
 | 301150 | 001125 | WIGOS identifier series (Numeric)                                               |                                                    |
@@ -103,4 +102,3 @@ and trajectories originating from marine animal tags.
 | 306035 | 022064 | Salinity (0/00)                                                                 | = 12 Salinity at a level                           |
 | 306035 | 008080 | Qualifier for GTSPP quality flag (Code table)                                   |                                                    |
 | 306035 | 033050 | Global GTSPP quality flag (Code table)                                          |                                                    |
-+--------+--------+---------------------------------------------------------------------------------+----------------------------------------------------+
