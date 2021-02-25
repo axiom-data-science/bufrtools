@@ -3,6 +3,7 @@
 """Module for basic and general parsing functions."""
 from pathlib import Path
 
+import cftime
 import pandas as pd
 from pocean.dsg import *  # noqa Import required for CFDataset
 from pocean.cf import CFDataset
@@ -48,8 +49,18 @@ def load_netcdf(ipt: Path) -> pd.DataFrame:
         'uuid': meta.get('uuid')['data'],
         'ptt': meta.get('ptt', '')['data']
     }
+    df = ds.to_dataframe(axes=axes, clean_cols=False, clean_rows=False)
+
+    try:
+        df.time.astype(int)
+    except TypeError:
+        if isinstance(df.time.iloc[0], cftime.datetime):
+            df['time'] = df.time.apply(lambda x: x._to_real_datetime())
+        else:
+            raise ValueError("Could not find a pandas compatible 'time' column")
+
     return (
-        ds.to_dataframe(axes=axes, clean_cols=False, clean_rows=False),
+        df,
         valid_meta
     )
 

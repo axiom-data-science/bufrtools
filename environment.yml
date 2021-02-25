@@ -4,6 +4,8 @@ channels:
   - defaults
   - axiom-data-science
 dependencies:
+  - cftime
   - pyyaml
   - pandas
   - pocean-core>=1.9.3
+  - pyarrow

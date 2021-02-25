@@ -1,3 +1,5 @@
+cftime
 pandas
 pyyaml
 pocean-core>=1.9.3
+pyarrow
