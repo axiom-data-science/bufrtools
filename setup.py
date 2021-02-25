@@ -9,6 +9,11 @@ def readme():
         return f.read()
 
 
+def version():
+    with open('VERSION') as f:
+        return f.read()
+
+
 def pip_requirements():
     reqs = []
     with open('requirements.txt', 'r') as f:
@@ -22,12 +27,12 @@ def pip_requirements():
 
 setup(
     name             = 'bufrtools',
-    version          = '0.0.1',
+    version          = version(),
     description      = 'A suite of tools for working with BUFR',
     long_description = readme(),
     author           = 'Luke Campbell',
     author_email     = 'luke@axds.co',
-    url              = 'https://git.axiom/luke/bufrtools',
+    url              = 'https://github.com/axiom-data-science/bufrtools',
     packages         = find_packages(),
     install_requires = pip_requirements(),
     entry_points     = {
