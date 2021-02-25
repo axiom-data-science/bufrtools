@@ -127,25 +127,25 @@ def get_trajectory_sequences(df: pd.DataFrame) -> List[dict]:
 def process_trajectory(trajectory_seq: pd.DataFrame, row) -> List[dict]:
     """Returns the sequence for the given row of the trajectory data frame."""
     trajectory_seq['value'] = [
-        26,                         # Last known position
-        np.nan,                     # Sequence
+        26,                          # Last known position
+        np.nan,                      # Sequence
         row.time.year,
         row.time.month,
         row.time.day,
-        np.nan,                     # Sequence
+        np.nan,                      # Sequence
         row.time.hour,
         row.time.minute,
-        np.nan,                     # Lat/Lon Sequence,
+        np.nan,                      # Lat/Lon Sequence,
         row.lat,
         row.lon,
         row.direction,
         row.speed,
-        0,                          # Fixed to good
-        0,                          # Fixed to good
-        1,                          # 500 m <= Radius <= 1500 m
+        0,                           # Fixed to good
+        0,                           # Fixed to good
+        1,                           # 500 m <= Radius <= 1500 m
         row.z if row.z >= 0 else 0,
-        row.temperature,
-        31,                         # Missing Value
+        (row.temperature + 273.15),  # Sea / Water Temperature (K)
+        31,                          # Missing Value
     ]
     return trajectory_seq.to_dict(orient='records')
 
