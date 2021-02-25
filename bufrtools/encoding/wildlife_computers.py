@@ -13,12 +13,11 @@ from datetime import datetime
 import numpy as np
 import cftime
 import pandas as pd
-import pocean  # noqa Import required for CFDataset
-import pocean.dsg  # noqa Import required for CFDataset
-from pocean.cf import CFDataset
+
 from bufrtools.tables import get_sequence_description
 from bufrtools.encoding import bufr as encoder
 from bufrtools.util.gis import azimuth, haversine_distance
+from bufrtools.util.parse import parse_input_to_dataframe
 
 
 def get_section1() -> dict:
@@ -55,7 +54,7 @@ def get_section3() -> dict:
     return section3
 
 
-def drift(ncd: CFDataset) -> np.ndarray:
+def drift(df: pd.DataFrame) -> np.ndarray:
     """Returns the speed/drift values for the dataset.
 
     This function calculates drift by computer the haversine equation of the coordinates and
@@ -63,12 +62,13 @@ def drift(ncd: CFDataset) -> np.ndarray:
     travel no distance over no time will have a drift of zero. The last element of the returned
     array will be 0, as it can not be effectively calculated.
     """
-    t = ncd.variables['time'][:]
+    # Convert to epoch seconds
+    t = df.groupby('profile')['time'].first().astype('int64') // 1e9
     dt = np.diff(t)
-    assert 'seconds' in ncd.variables['time'].units
-    x = ncd.variables['lon'][:] * np.pi / 180
-    y = ncd.variables['lat'][:] * np.pi / 180
-    ds = haversine_distance(x, y)
+
+    x = df.groupby('profile')['lon'].first() * np.pi / 180
+    y = df.groupby('profile')['lat'].first() * np.pi / 180
+    ds = haversine_distance(x.values, y.values)
     ds_dt = np.zeros_like(t)
     for i in range(ds.shape[0]):
         if np.abs(ds[i]) < 0.0001 and np.abs(dt[i]) < 0.0001:
@@ -78,24 +78,34 @@ def drift(ncd: CFDataset) -> np.ndarray:
     return ds_dt
 
 
-def get_trajectory_sequences(ncd, df) -> List[dict]:
+def get_trajectory_sequences(df: pd.DataFrame) -> List[dict]:
     """Returns a sequence of records for the trajectory part of the BUFR message."""
-    dates = cftime.num2date(ncd.variables['time'][:], units=ncd.variables['time'].units)
-    x = ncd.variables['lon'][:] * np.pi / 180
-    y = ncd.variables['lat'][:] * np.pi / 180
-    theta = azimuth(x, y) * 180 / np.pi
+    # Pull profile locations out as the first point in each profile
+    t = df.groupby('profile')['time'].first()
+    x = df.groupby('profile')['lon'].first() * np.pi / 180
+    y = df.groupby('profile')['lat'].first() * np.pi / 180
+
+    theta = azimuth(x.values, y.values) * 180 / np.pi
     theta = (theta + 360) % 360
-    speed = drift(ncd)
+    speed = drift(df)
+
     trajectory = pd.DataFrame({
-        'profile': ncd.variables['profile'][:-1],
-        'time': dates[:-1],
-        'latitude': ncd.variables['lat'][:-1],
-        'longitude': ncd.variables['lon'][:-1],
+        'time': t[:-1],
+        'profile': df.groupby('profile')['profile'].first()[:-1],
+        'lat': df.groupby('profile')['lat'].first()[:-1],
+        'lon': df.groupby('profile')['lon'].first()[:-1],
         'direction': theta[:-1],
-        'speed': speed[:-1],
+        'speed': speed[:-1]
     })
+
     trajectory = trajectory[trajectory.speed > 0]
     trajectory['z'] = df.groupby('profile')['z'].min()
+    # Should we ever have a negative depth?
+    #trajectory['z'] = trajectory.z.apply(lambda x: max(0, x))
+    # Drop the profile index before merge
+    trajectory = trajectory.reset_index(drop=True)
+    # Combine back with the full dataset after calculating
+    # speed and direction
     trajectory = pd.merge(trajectory, df[['profile', 'z', 'temperature']])
     sequence = []
     sequence.append({
@@ -117,30 +127,30 @@ def get_trajectory_sequences(ncd, df) -> List[dict]:
 def process_trajectory(trajectory_seq: pd.DataFrame, row) -> List[dict]:
     """Returns the sequence for the given row of the trajectory data frame."""
     trajectory_seq['value'] = [
-        26,                         # Last known position
-        np.nan,                     # Sequence
+        26,                          # Last known position
+        np.nan,                      # Sequence
         row.time.year,
         row.time.month,
         row.time.day,
-        np.nan,                     # Sequence
+        np.nan,                      # Sequence
         row.time.hour,
         row.time.minute,
-        np.nan,                     # Lat/Lon Sequence,
-        row.latitude,
-        row.longitude,
+        np.nan,                      # Lat/Lon Sequence,
+        row.lat,
+        row.lon,
         row.direction,
         row.speed,
-        0,                          # Fixed to good
-        0,                          # Fixed to good
-        1,                          # 500 m <= Radius <= 1500 m
+        0,                           # Fixed to good
+        0,                           # Fixed to good
+        1,                           # 500 m <= Radius <= 1500 m
         row.z if row.z >= 0 else 0,
-        row.temperature,
-        31,                         # Missing Value
+        (row.temperature + 273.15),  # Sea / Water Temperature (K)
+        31,                          # Missing Value
     ]
     return trajectory_seq.to_dict(orient='records')
 
 
-def get_profile_sequence(ncd, df) -> List[dict]:
+def get_profile_sequence(df: pd.DataFrame) -> List[dict]:
     """Returns the sequences for the profiles."""
     parent_seq = get_sequence_description('315013')
     profile_description_seq = parent_seq.iloc[37:50]
@@ -153,9 +163,9 @@ def get_profile_sequence(ncd, df) -> List[dict]:
         'scale': 0,
         'offset': 0,
         'bit_len': 8,
-        'value': ncd.variables['profile'].shape[0],
+        'value': len(df.profile.unique()),
     })
-    for profile_id in ncd.variables['profile'][:]:
+    for profile_id in df.profile.unique():
         profile = df[df['profile'] == profile_id]
         profile_seq = process_profile_description(profile_description_seq.copy(), profile)
         sequence.extend(profile_seq)
@@ -166,16 +176,18 @@ def get_profile_sequence(ncd, df) -> List[dict]:
 
 def process_profile_description(profile_seq: pd.DataFrame, profile: pd.DataFrame) -> List[dict]:
     """Returns the sequence for the profile description part."""
-    date = profile.iloc[0]['t']
+    first_row = profile.iloc[0]
+    date = first_row.time
+
     year = date.year
     month = date.month
     day = date.day
     hour = date.hour
     minute = date.minute
-    latitude = profile.iloc[0]['y']
-    longitude = profile.iloc[0]['x']
-    profile_id = str(profile.iloc[0]['profile'])
-    seq_no = profile.iloc[0]['profile']
+    lat = first_row.lat
+    lon = first_row.lon
+    profile_id = str(first_row.profile)
+    seq_no = first_row.profile
     direction = 0 if (profile.z.mean() < 0) else 1
     profile_seq['value'] = [
         np.nan,     # Sequence
@@ -186,8 +198,8 @@ def process_profile_description(profile_seq: pd.DataFrame, profile: pd.DataFrame
         hour,
         minute,
         np.nan,     # Sequence
-        latitude,
-        longitude,
+        lat,
+        lon,
         profile_id,
         seq_no,
         direction,
@@ -227,9 +239,13 @@ def process_profile_data(profile_seq: pd.DataFrame, profile: pd.DataFrame) -> Li
     return sequence
 
 
-def get_section4(ncd) -> List[dict]:
+def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
     """Returns the section4 data."""
     records = []
+
+    uuid = kwargs.pop('uuid')
+    ptt = kwargs.pop('ptt')
+
     wigos_sequence = get_sequence_description('301150')
 
     wigos_identifier_series = 0  # Placeholder
@@ -249,24 +265,29 @@ def get_section4(ncd) -> List[dict]:
     platform_id_sequence['value'] = [
         123,            # WMO ID
         np.nan,         # operator
-        ncd.uuid[:32],  # Long station or site name
+        uuid[:32],      # Long station or site name
         np.nan,         # operator
         11,             # Marine animal
         995,            # Attached to marine animal
-        ncd.ptt[:12],
+        ptt[:12],
         1,              # Argos
     ]
     records.extend(platform_id_sequence.to_dict(orient='records'))
     # WC profiles don't have enough data to fill in the trajectory portion of the BUFR, so we'll
-    df = ncd.to_dataframe()
-    records.extend(get_trajectory_sequences(ncd, df))
-    records.extend(get_profile_sequence(ncd, df))
+    records.extend(get_trajectory_sequences(df))
+    records.extend(get_profile_sequence(df))
     return records
 
 
-def encode(profile_dataset: Path, output: Path):
-    """Encodes the netCDF `profile_dataset` as BUFR and writes it to `output`."""
-    ncd = CFDataset.load(str(profile_dataset))
+def encode(profile_dataset: Path, output: Path, **kwargs):
+    """Encodes the input `profile_dataset` as BUFR and writes it to `output`."""
+    df, meta = parse_input_to_dataframe(profile_dataset)
+
+    # If we were able to extract metadata attributes from the
+    # source dataset, use those instead of the passed in values
+    if meta:
+        kwargs = {**kwargs, **meta}
+
     context = {}
     context['buf'] = buf = io.BytesIO()
     encoder.encode_section0({}, context)
@@ -274,7 +295,7 @@ def encode(profile_dataset: Path, output: Path):
     encoder.encode_section1({'section1': section1}, context)
     section3 = get_section3()
     encoder.encode_section3({'section3': section3}, context)
-    section4 = get_section4(ncd)
+    section4 = get_section4(df, **kwargs)
     encoder.encode_section4({'section4': section4}, context)
     encoder.encode_section5(context)
     encoder.finalize_bufr(context)
@@ -290,7 +311,15 @@ def parse_args(argv) -> Namespace:
                         '--output',
                         type=Path,
                         default=Path('output.bufr'), help='Output file')
-    parser.add_argument('profile_dataset', type=Path, help='ATN Wildlife Comptuers profile netCDF')
+    parser.add_argument('profile_dataset', type=Path, help='ATN Wildlife Computers profile netCDF')
+    parser.add_argument('-u',
+                        '--uuid',
+                        type=str,
+                        default=None)
+    parser.add_argument('-p',
+                        '--ptt',
+                        type=str,
+                        default=None)
 
     args = parser.parse_args(argv)
     return args
@@ -301,7 +330,7 @@ def main():
     args = parse_args(sys.argv[1:])
 
     assert args.profile_dataset.exists()
-    encode(args.profile_dataset, args.output)
+    encode(args.profile_dataset, args.output, uuid=args.uuid, ptt=args.ptt)
     return 0
 
 
