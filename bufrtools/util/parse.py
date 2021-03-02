@@ -66,8 +66,9 @@ def load_netcdf(ipt: Path) -> pd.DataFrame:
 
 
 def parse_input_to_dataframe(ipt: Path) -> pd.DataFrame:
+    # Shortcut to avoid needing a file at all
     if isinstance(ipt, pd.DataFrame):
-        return ipt
+        return (ipt, {})
     else:
         # Try to load as a pandas dataset file
         loaders = [
