@@ -7,6 +7,15 @@ A suite of utilities and scripts to forge a BUFR file, or decode one.
 Installation
 ------------
 
+`bufrtools` is available in the `axiom-data-science` channel on anaconda.org.
+
+```
+conda install -c axiom-data-science bufrtools
+```
+
+Development
+-----------
+
 It is advisable to use conda for development and usage of this project, although it's not strictly
 necessary. This README assumes the use of conda, however.
 
