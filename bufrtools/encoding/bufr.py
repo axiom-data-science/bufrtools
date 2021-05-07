@@ -132,7 +132,6 @@ def encode_section4(message: dict, context: dict):
     sequence = message['section4'][:]
     override_bitlength = None
     for seq in sequence:
-        print(seq)
         # Deal with operators
         if seq['type'] == 'operator':
             f, x, y = parse_ref(seq['fxy'])
