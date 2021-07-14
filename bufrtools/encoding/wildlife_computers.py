@@ -245,6 +245,7 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
 
     uuid = kwargs.pop('uuid')
     ptt = kwargs.pop('ptt')
+    wmo_id = kwargs.pop('wmo_platform_code')
 
     wigos_sequence = get_sequence_description('301150')
 
@@ -263,7 +264,7 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
 
     platform_id_sequence = get_sequence_description('315013')[6:14]
     platform_id_sequence['value'] = [
-        123,            # WMO ID
+        wmo_id,         # WMO ID
         np.nan,         # operator
         uuid[:32],      # Long station or site name
         np.nan,         # operator
