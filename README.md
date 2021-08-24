@@ -33,16 +33,16 @@ Usage
 Encoding Wildlife Computers netCDF Profiles
 -------------------------------------------
 
-The `wildlife_computers` module provides a command-line interface for encoding a Wildlife Computers'
-netCDF profile dataset as a BUFR message.
+The `wildlife_computers` module provides a command-line interface for encoding a Wildlife Computers' netCDF profile dataset as a BUFR message.
 
 Usage:
 ```
 python bufrtools/encoding/wildlife_computers.py -o <output bufr file> <netCDF path>
 ```
 
-The following table contains the expanded sequence of descriptors for temperature salinity profiles
-and trajectories originating from marine animal tags.
+The following table contains the expanded sequence of descriptors for temperature salinity profiles and trajectories originating from marine animal tags.
+
+The source of this information is the published [Manual on WMO Codes](https://library.wmo.int/doc_num.php?explnum_id=10722).
 
 | parent | fxy    | text                                                                            | Subtitle                                           |
 |--------|--------|---------------------------------------------------------------------------------|----------------------------------------------------|
@@ -56,7 +56,7 @@ and trajectories originating from marine animal tags.
 | 315013 | 208032 | Change width of CCITT IA5 field (Operator)                                      | change width to 32 characters                      |
 | 315013 | 001019 | Long station or site name (CCITT IA5)                                           | Platform ID, e.g. ct145-933-BAT2-19 (max 32-chars) |
 | 315013 | 208000 | Change width of CCITT IA5 field (Operator)                                      | Cancel change width                                |
-| 315013 | 003001 | Surface Station Type (Code table)                                               | 11 (Marine Animal)                                 |
+| 315013 | 003001 | Surface Station Type (Code table)                                               | 10 (Marine Animal)                                 |
 | 315013 | 022067 | Instrument type for water temperature/salinity profile measurement (Code table) | Set to 995 (attached to marine animal)             |
 | 315013 | 001051 | Platform Transmitter ID number (CCITT IA5)                                      | e.g. Argos PTT                                     |
 | 315013 | 002148 | Data collection and/or location system (Code table)                             |                                                    |

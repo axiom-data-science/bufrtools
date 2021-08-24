@@ -9,7 +9,7 @@
 7,315013,208032,Change width of CCITT IA5 field,change width to 32 characters,0,Operator,,,,,operator,187
 8,315013,001019,Long station or site name,"Platform ID, e.g. ct145-933-BAT2-19 (max 32-chars)",256,CCITT IA5,0.0,0.0,ct145-933-BAT2-19,,string,187
 9,315013,208000,Change width of CCITT IA5 field,Cancel change width,0,Operator,,,,,operator,443
-10,315013,003001,Surface Station Type,11 (Marine Animal),5,Code table,0.0,0.0,11,,numeric,443
+10,315013,003001,Surface Station Type,10 (Marine Animal),5,Code table,0.0,0.0,10,,numeric,443
 11,315013,022067,Instrument type for water temperature/salinity profile measurement,Set to 995 (attached to marine animal),10,Code table,0.0,0.0,995,,numeric,448
 12,315013,001051,Platform Transmitter ID number,e.g. Argos PTT,96,CCITT IA5,0.0,0.0,123456,,string,458
 13,315013,002148,Data collection and/or location system,,5,Code table,0.0,0.0,1,ARGOS,numeric,554

@@ -298,7 +298,7 @@ Category,CategoryOfSequences_en,FXY1,Title_en,SubTitle_en,FXY2,ElementName_en,El
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,208032,Change width of CCITT IA5 field,change width to 32 characters,,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,001019,Long station or site name,"Platform ID, e.g. ct145-933-BAT2-19 (max 32-chars)",,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,208000,Change width of CCITT IA5 field,Cancel change width,,Operational
-15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,003001,Surface Station Type,11 (Marine Animal),,Operational
+15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,003001,Surface Station Type,10 (Marine Animal),,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,022067,Instrument type for water temperature/salinity profile measurement,Set to 995 (attached to marine animal),,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,001051,Platform Transmitter ID number,e.g. Argos PTT,,Operational
 15,Oceanographic report sequences,315013,(Met-ocean observations from marine animal tags),,002148,Data collection and/or location system,,,Operational

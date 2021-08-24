@@ -11,7 +11,6 @@ from argparse import Namespace, ArgumentParser
 from datetime import datetime
 
 import numpy as np
-import cftime
 import pandas as pd
 
 from bufrtools.tables import get_sequence_description
@@ -245,14 +244,15 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
 
     uuid = kwargs.pop('uuid')
     ptt = kwargs.pop('ptt')
-    wmo_id = kwargs.pop('wmo_platform_code')
+    wmo = kwargs.pop('wmo_platform_code', 0)
+    wigos = kwargs.pop('wigos_platform_code', '')
 
     wigos_sequence = get_sequence_description('301150')
 
     wigos_identifier_series = 0  # Placeholder
     wigos_issuer = 2202
     wigos_issue_number = 0  # Placeholder
-    wigos_local_identifier = 'to be determined'
+    wigos_local_identifier = wigos
     wigos_sequence['value'] = [
         np.nan,
         wigos_identifier_series,
@@ -264,11 +264,11 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
 
     platform_id_sequence = get_sequence_description('315013')[6:14]
     platform_id_sequence['value'] = [
-        wmo_id,         # WMO ID
+        wmo,            # WMO ID
         np.nan,         # operator
         uuid[:32],      # Long station or site name
         np.nan,         # operator
-        11,             # Marine animal
+        10,             # Marine animal
         995,            # Attached to marine animal
         ptt[:12],
         1,              # Argos
