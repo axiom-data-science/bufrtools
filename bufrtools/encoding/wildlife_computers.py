@@ -29,7 +29,7 @@ def get_section1() -> dict:
         'sub_category': 4,           # subsurface float (profile)
         'local_category': 0,         # Ideally something specifies this as a marine mammal
                                      # animal tag
-        'master_table_version': 33,  # Future version
+        'master_table_version': 36,  # Future version
         'local_table_version': 255,  # Unknown
         'year': now.year,
         'month': now.month,
