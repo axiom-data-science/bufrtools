@@ -43,5 +43,3 @@ setup(
         'bufrtools.tables' : ['data/*.csv'],
     },
 )
-
-

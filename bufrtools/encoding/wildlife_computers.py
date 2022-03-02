@@ -258,20 +258,20 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
         wigos_identifier_series,  # 001125,WIGOS identifier series,,,Operational
         wigos_issuer,             # 001126,WIGOS issuer of identifier,,,Operational
         wigos_issue_number,       # 001127,WIGOS issue number,,,Operational
-        wigos_local_identifier,    #001128,WIGOS local identifier (character),,,Operational
+        wigos_local_identifier,   # 001128,WIGOS local identifier (character),,,Operational
     ]
     records.extend(wigos_sequence.to_dict(orient='records'))
 
     platform_id_sequence = get_sequence_description('315013')[6:14]
     platform_id_sequence['value'] = [
-        wmo,            # 001087,WMO marine observing platform extended identifier ,WMO number where assigned,,Operational
-        np.nan,         # 208032,Change width of CCITT IA5 ,change width to 32 characters,,Operational
-        uuid[:32],      # 001019,Ship or mobile land station identifier ,"Platform ID, e.g. ct145-933-BAT2-18 (max 32 characters)",,Operational
-        np.nan,         # 208000,Change width of CCITT IA5 ,Cancel change width,,Operational
-        10,             # 003001,Surface station type ,10 (Marine animal),,Operational
-        995,            # 022067,Instrument type for water temperature and/or salinity measurement,set to 995 (attached to marine animal),,Operational
-        ptt[:12],       # 001051,Platform transmitter ID number,e.g. Argos PTT,,Operational
-        1,              # 002148,Data collection and/or location system,,,Operational
+        wmo,            # 001087,WMO marine observing platform extended identifier ,WMO number where assigned,,Operational # noqa
+        np.nan,         # 208032,Change width of CCITT IA5 ,change width to 32 characters,,Operational # noqa
+        uuid[:32],      # 001019,Ship or mobile land station identifier ,"Platform ID, e.g. ct145-933-BAT2-18 (max 32 characters)",,Operational # noqa
+        np.nan,         # 208000,Change width of CCITT IA5 ,Cancel change width,,Operational # noqa
+        10,             # 003001,Surface station type ,10 (Marine animal),,Operational # noqa
+        995,            # 022067,Instrument type for water temperature and/or salinity measurement,set to 995 (attached to marine animal),,Operational # noqa
+        ptt[:12],       # 001051,Platform transmitter ID number,e.g. Argos PTT,,Operational # noqa
+        1,              # 002148,Data collection and/or location system,,,Operational # noqa
     ]
     records.extend(platform_id_sequence.to_dict(orient='records'))
     # WC profiles don't have enough data to fill in the trajectory portion of the BUFR, so we'll
