@@ -59,7 +59,7 @@ def test_wildlife_computers_encoding_from_netcdf(parse_args, tempfile_fixture):
 
         # Verify that there are 157 profiles
         f.seek(1862)
-        assert f.read(2) == b'\x3F\x3A'
+        assert f.read(2) == b'\xBF\x3A'
 
 
 @patch('bufrtools.encoding.wildlife_computers.parse_args')
@@ -90,7 +90,7 @@ def test_wildlife_computers_encoding_from_parquet(parse_args, tempfile_fixture):
 
         # Verify that there are 157 profiles
         f.seek(1862)
-        assert f.read(2) == b'\x3F\x3A'
+        assert f.read(2) == b'\xBF\x3A'
 
 
 @patch('bufrtools.encoding.wildlife_computers.parse_args')
@@ -121,4 +121,4 @@ def test_wildlife_computers_encoding_from_csv(parse_args, tempfile_fixture):
 
         # Verify that there are 157 profiles
         f.seek(1862)
-        assert f.read(2) == b'\x3F\x3A'
+        assert f.read(2) == b'\xBF\x3A'
