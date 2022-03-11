@@ -33,6 +33,16 @@ FXY,ElementName_en,CodeFigure,EntryName_en,EntryName_sub1_en,EntryName_sub2_en,N
 002004,Type of instrumentation for evaporation measurement or type of crop for which evapotranspiration is reported,9,Other crops,Evapotranspiration,,,Operational
 002004,Type of instrumentation for evaporation measurement or type of crop for which evapotranspiration is reported,10-14,Reserved,,,,Operational
 002004,Type of instrumentation for evaporation measurement or type of crop for which evapotranspiration is reported,15,Missing value,,,,Operational
+002006,Upper Air Remote Sensing Instrument Type,0,Reserved,,,,Operational
+002006,Upper Air Remote Sensing Instrument Type,1,Elastic backscatter lidar,,,,Operational
+002006,Upper Air Remote Sensing Instrument Type,2,Raman backscatter lidar,,,,Operational
+002006,Upper Air Remote Sensing Instrument Type,3,Radar wind profiler,,,,Operational
+002006,Upper Air Remote Sensing Instrument Type,4,Lidar wind profiler,,,,Operational
+002006,Upper Air Remote Sensing Instrument Type,5,Sodar wind profiler,,,,Operational
+002006,Upper Air Remote Sensing Instrument Type,6,Wind profiler,,,,Operational
+002006,Upper Air Remote Sensing Instrument Type,7,Lidar,,,,Operational
+002006,Upper Air Remote Sensing Instrument Type,8-62,Reserved,,,,Operational
+002006,Upper Air Remote Sensing Instrument Type,63,Missing value,,,,Operational
 002007,Type of sensor for water level measuring instrument,0,Reserved,,,,Operational
 002007,Type of sensor for water level measuring instrument,1,Shaft encoder float system,,,,Operational
 002007,Type of sensor for water level measuring instrument,2,Ultrasonic,,,,Operational
@@ -218,8 +228,8 @@ FXY,ElementName_en,CodeFigure,EntryName_en,EntryName_sub1_en,EntryName_sub2_en,N
 002032,Indicator for digitization,2,Reserved,,,,Operational
 002032,Indicator for digitization,3,Missing value,,,,Operational
 002033,Method of salinity/depth measurement,0,No salinity measured,,,,Operational
-002033,Method of salinity/depth measurement,1,"In situ sensor, accuracy better than 0.02 ‰",,,,Operational
-002033,Method of salinity/depth measurement,2,"In situ sensor, accuracy less than 0.02 ‰",,,,Operational
+002033,Method of salinity/depth measurement,1,"In situ sensor, accuracy better than 0.02 0/00",,,,Operational
+002033,Method of salinity/depth measurement,2,"In situ sensor, accuracy less than 0.02 0/00",,,,Operational
 002033,Method of salinity/depth measurement,3,Sample analysis,,,,Operational
 002033,Method of salinity/depth measurement,4-6,Reserved,,,,Operational
 002033,Method of salinity/depth measurement,7,Missing value,,,,Operational
@@ -328,7 +338,8 @@ FXY,ElementName_en,CodeFigure,EntryName_en,EntryName_sub1_en,EntryName_sub2_en,N
 002048,Satellite sensor indicator,10,JMR (JASON Microwave Radiometer),,,,Operational
 002048,Satellite sensor indicator,11,MHS,,,,Operational
 002048,Satellite sensor indicator,12,ASCAT,,,,Operational
-002048,Satellite sensor indicator,13-14,Reserved,,,,Operational
+002048,Satellite sensor indicator,13,OSCAT2,,,,Operational
+002048,Satellite sensor indicator,14,Reserved,,,,Operational
 002048,Satellite sensor indicator,15,Missing value,,,,Operational
 002049,Geostationary satellite data-processing technique used,1,Processing technique not defined,,,,Operational
 002049,Geostationary satellite data-processing technique used,2,Simultaneous physical retrieval,,,,Operational

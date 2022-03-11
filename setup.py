@@ -30,6 +30,7 @@ setup(
     version          = version(),
     description      = 'A suite of tools for working with BUFR',
     long_description = readme(),
+    long_description_content_type = 'text/markdown',
     author           = 'Luke Campbell',
     author_email     = 'luke@axds.co',
     url              = 'https://github.com/axiom-data-science/bufrtools',
