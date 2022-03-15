@@ -242,17 +242,12 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
     """Returns the section4 data."""
     records = []
 
-    uuid = kwargs.pop('uuid')
-    ptt = kwargs.pop('ptt')
-    wmo = kwargs.pop('wmo_platform_code', 0)
-    wigos = kwargs.pop('wigos_platform_code', '')
+    wigos_issuer = int(kwargs.pop('wigos_issuer', 22000))
+    wigos_local_identifier = str(kwargs.pop('wigos_platform_code', ''))
+    wigos_identifier_series = 0  # Placeholder
+    wigos_issue_number = 0       # Placeholder
 
     wigos_sequence = get_sequence_description('301150')
-
-    wigos_identifier_series = 0  # Placeholder
-    wigos_issuer = 2202
-    wigos_issue_number = 0  # Placeholder
-    wigos_local_identifier = wigos
     wigos_sequence['value'] = [
         np.nan,                   # Sequence
         wigos_identifier_series,  # 001125,WIGOS identifier series,,,Operational
@@ -261,6 +256,13 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
         wigos_local_identifier,   # 001128,WIGOS local identifier (character),,,Operational
     ]
     records.extend(wigos_sequence.to_dict(orient='records'))
+
+    uuid = kwargs.pop('uuid')
+    ptt = kwargs.pop('ptt')
+    wmo = kwargs.pop('wmo_platform_code', None)
+    # If WMO ID is passed in as None, fill it with zero
+    if wmo is None:
+        wmo = 0
 
     platform_id_sequence = get_sequence_description('315013')[6:14]
     platform_id_sequence['value'] = [
