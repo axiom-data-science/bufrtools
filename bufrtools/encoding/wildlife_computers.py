@@ -125,6 +125,13 @@ def get_trajectory_sequences(df: pd.DataFrame) -> List[dict]:
 
 def process_trajectory(trajectory_seq: pd.DataFrame, row) -> List[dict]:
     """Returns the sequence for the given row of the trajectory data frame."""
+
+    # Get temperature
+    temperature = getattr(row, 'temperature', np.nan)
+    temperature += 273.15  # Convert from deg_C to Kelvin
+    if np.isnan(temperature):
+        temperature = int('1' * 19, 2)  # 19 bits of all 1s = 524287
+
     trajectory_seq['value'] = [
         26,                          # Last known position
         np.nan,                      # Sequence
@@ -143,7 +150,7 @@ def process_trajectory(trajectory_seq: pd.DataFrame, row) -> List[dict]:
         0,                           # Fixed to good
         1,                           # 500 m <= Radius <= 1500 m
         row.z if row.z >= 0 else 0,
-        (row.temperature + 273.15),  # Sea / Water Temperature (K)
+        temperature,                 # Sea / Water Temperature (K)
         31,                          # Missing Value
     ]
     return trajectory_seq.to_dict(orient='records')
@@ -220,17 +227,35 @@ def process_profile_data(profile_seq: pd.DataFrame, profile: pd.DataFrame) -> Li
     })
     for i, row in profile.iterrows():
         seq = profile_seq.copy()
+
+        # Get pressure
+        pressure = getattr(row, 'pressure', np.nan)
+        pressure *= 10000  # Convert from dbar to Pa
+        if np.isnan(pressure):
+            pressure = int('1' * 17, 2)  # 17 bits of all 1s = 131071
+
+        # Get temperature
+        temperature = getattr(row, 'temperature', np.nan)
+        temperature += 273.15  # Convert from deg_C to Kelvin
+        if np.isnan(temperature):
+            temperature = int('1' * 15, 2)  # 15 bits of all 1s = 32767
+
+        # Get salinity
+        salinity = getattr(row, 'salinity', np.nan)
+        if np.isnan(salinity):
+            salinity = int('1' * 17, 2)  # 17 bits of all 1s = 131071
+
         seq['value'] = [
             row.z if row.z > 0 else 0,  # Depth below sea water
             13,                         # Depth at a level
             0,                          # Unqualified
-            0,                          # Pressure is not available
+            pressure,                   # Pressure
             10,                         # Pressure at a level
             0,                          # Unqualified
-            row.temperature + 273.15,   # Temperature in K
+            temperature,                # Temperature in K
             11,                         # Temperature at a depth
             0,                          # Unqualified
-            0,                          # Salinity
+            salinity,                   # Salinity
             12,                         # Salinity at a depth
             0,                          # Unqualified
         ]
