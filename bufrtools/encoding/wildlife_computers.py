@@ -129,8 +129,6 @@ def process_trajectory(trajectory_seq: pd.DataFrame, row) -> List[dict]:
     # Get temperature
     temperature = getattr(row, 'temperature', np.nan)
     temperature += 273.15  # Convert from deg_C to Kelvin
-    if np.isnan(temperature):
-        temperature = int('1' * 19, 2)  # 19 bits of all 1s = 524287
 
     trajectory_seq['value'] = [
         26,                          # Last known position
@@ -231,19 +229,11 @@ def process_profile_data(profile_seq: pd.DataFrame, profile: pd.DataFrame) -> Li
         # Get pressure
         pressure = getattr(row, 'pressure', np.nan)
         pressure *= 10000  # Convert from dbar to Pa
-        if np.isnan(pressure):
-            pressure = int('1' * 17, 2)  # 17 bits of all 1s = 131071
-
         # Get temperature
         temperature = getattr(row, 'temperature', np.nan)
         temperature += 273.15  # Convert from deg_C to Kelvin
-        if np.isnan(temperature):
-            temperature = int('1' * 15, 2)  # 15 bits of all 1s = 32767
-
         # Get salinity
         salinity = getattr(row, 'salinity', np.nan)
-        if np.isnan(salinity):
-            salinity = int('1' * 17, 2)  # 17 bits of all 1s = 131071
 
         seq['value'] = [
             row.z if row.z > 0 else 0,  # Depth below sea water

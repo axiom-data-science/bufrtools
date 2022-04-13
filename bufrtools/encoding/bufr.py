@@ -148,11 +148,18 @@ def encode_section4(message: dict, context: dict):
             bitlen = seq['bit_len']
             if override_bitlength:
                 bitlen = override_bitlength
-            value = float(seq['value'])
-            if seq['scale']:
-                value = value * math.pow(10, seq['scale'])
-            if seq['offset']:
-                value = value - seq['offset']
+            value = seq['value']
+            if np.isnan(float(value)):
+                # If a value is NaN, fill it with all 1s,
+                # which is the BUFR missing_value. Do not
+                # apply scale and offset
+                value = float(int('1' * bitlen, 2))
+            else:
+                value = float(seq['value'])
+                if seq['scale']:
+                    value = value * math.pow(10, seq['scale'])
+                if seq['offset']:
+                    value = value - seq['offset']
             # The value should be ROUNDED to the nearest integer
             value = int(np.round(value))
             write_uint(write_buf, value, bit_offset, bitlen)
