@@ -29,7 +29,7 @@ def get_section1() -> dict:
         'sub_category': 4,           # subsurface float (profile)
         'local_category': 0,         # Ideally something specifies this as a marine mammal
                                      # animal tag
-        'master_table_version': 37,
+        'master_table_version': 39,
         'local_table_version': 255,  # Unknown
         'year': now.year,
         'month': now.month,
@@ -48,7 +48,7 @@ def get_section3() -> dict:
         'number_of_subsets': 1,
         'observed_flag': True,
         'compressed_flag': False,
-        'descriptors': ['315013'],
+        'descriptors': ['315023'],
     }
     return section3
 
@@ -116,8 +116,8 @@ def get_trajectory_sequences(df: pd.DataFrame) -> List[dict]:
         'bit_len': 8,
         'value': len(trajectory)
     })
-    trajectory_seq = get_sequence_description('315013').iloc[16:35]
-    for i, row in trajectory.iterrows():
+    trajectory_seq = get_sequence_description('315023').iloc[18:37]
+    for _, row in trajectory.iterrows():
         for seq in process_trajectory(trajectory_seq.copy(), row):
             sequence.append(seq)
     return sequence
@@ -156,9 +156,9 @@ def process_trajectory(trajectory_seq: pd.DataFrame, row) -> List[dict]:
 
 def get_profile_sequence(df: pd.DataFrame) -> List[dict]:
     """Returns the sequences for the profiles."""
-    parent_seq = get_sequence_description('315013')
-    profile_description_seq = parent_seq.iloc[37:50]
-    profile_data_seq = parent_seq.iloc[53:65]
+    parent_seq = get_sequence_description('315023')
+    profile_description_seq = parent_seq.iloc[39:52]
+    profile_data_seq = parent_seq.iloc[55:67]
     sequence = []
     sequence.append({
         'fxy': '031001',
@@ -279,9 +279,11 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
     if wmo is None:
         wmo = 0
 
-    platform_id_sequence = get_sequence_description('315013')[6:14]
+    platform_id_sequence = get_sequence_description('315023')[6:16]
     platform_id_sequence['value'] = [
+        np.nan,         # 201129,Change data width,,,Operational  # noqa
         wmo,            # 001087,WMO marine observing platform extended identifier ,WMO number where assigned,,Operational # noqa
+        np.nan,         # 201000,Change data width,Cancel,,Operational
         np.nan,         # 208032,Change width of CCITT IA5 ,change width to 32 characters,,Operational # noqa
         uuid[:32],      # 001019,Ship or mobile land station identifier ,"Platform ID, e.g. ct145-933-BAT2-18 (max 32 characters)",,Operational # noqa
         np.nan,         # 208000,Change width of CCITT IA5 ,Cancel change width,,Operational # noqa

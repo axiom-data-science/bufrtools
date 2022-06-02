@@ -1,55 +1,57 @@
 ,Parent,fxy,text,Subtitle,bit_len,BUFR_Unit,scale,offset,value,value_comment,type,total_bit_offset
-0,315013,315013,(Met-ocean observations from marine animal tags),,0,Sequence,,,,,numeric,0
-1,315013,301150,WIGOS identifier,,0,Sequence,,,,,numeric,0
+0,315023,315023,(Met-ocean observations from marine animal tags),,0,Sequence,,,,,numeric,0
+1,315023,301150,WIGOS identifier,,0,Sequence,,,,,numeric,0
 2,301150,001125,WIGOS identifier series,,4,Numeric,0.0,0.0,0,,numeric,0
 3,301150,001126,WIGOS issuer of identifier,,16,Numeric,0.0,0.0,22002,,numeric,4
 4,301150,001127,WIGOS issue number,,16,Numeric,0.0,0.0,0,,numeric,20
 5,301150,001128,WIGOS local identifier (character),,128,CCITT IA5,0.0,0.0,37678,,string,36
-6,315013,001087,WMO marine observing platform extended identifier,WMO number where assigned,23,Numeric,0.0,0.0,37678,,numeric,164
-7,315013,208032,Change width of CCITT IA5 field,change width to 32 characters,0,Operator,,,,,operator,187
-8,315013,001019,Long station or site name,"Platform ID, e.g. ct145-933-BAT2-19 (max 32-chars)",256,CCITT IA5,0.0,0.0,ct145-933-BAT2-19,,string,187
-9,315013,208000,Change width of CCITT IA5 field,Cancel change width,0,Operator,,,,,operator,443
-10,315013,003001,Surface Station Type,10 (Marine Animal),5,Code table,0.0,0.0,10,,numeric,443
-11,315013,022067,Instrument type for water temperature/salinity profile measurement,Set to 995 (attached to marine animal),10,Code table,0.0,0.0,995,,numeric,448
-12,315013,001051,Platform Transmitter ID number,e.g. Argos PTT,96,CCITT IA5,0.0,0.0,123456,,string,458
-13,315013,002148,Data collection and/or location system,,5,Code table,0.0,0.0,1,ARGOS,numeric,554
-14,315013,112000,Delayed replication of 12 descriptors,,0,Replication,,,,,,458
-15,315013,031001,Delayed descriptor replication factor,,8,Numeric,0.0,0.0,1,,numeric,458
-16,315013,008021,Time significance,"set to 26, time of last known position",5,Code table,0.0,0.0,26,,numeric,466
-17,315013,301011,"(Year, month, day)",,0,Sequence,,,,,numeric,471
+7,315023,201129,Change data width,change width to 24 characters,0,Operator,,,,,operator,164
+6,315023,001087,WMO marine observing platform extended identifier,WMO number where assigned,23,Numeric,0.0,0.0,37678,,numeric,164
+9,315023,201000,Cancel chane data width,Cancel change width,0,Operator,,,,,operator,187
+7,315023,208032,Change width of CCITT IA5 field,change width to 32 characters,0,Operator,,,,,operator,187
+8,315023,001019,Long station or site name,"Platform ID, e.g. ct145-933-BAT2-19 (max 32-chars)",256,CCITT IA5,0.0,0.0,ct145-933-BAT2-19,,string,187
+9,315023,208000,Change width of CCITT IA5 field,Cancel change width,0,Operator,,,,,operator,443
+10,315023,003001,Surface Station Type,10 (Marine Animal),5,Code table,0.0,0.0,10,,numeric,443
+11,315023,022067,Instrument type for water temperature/salinity profile measurement,Set to 995 (attached to marine animal),10,Code table,0.0,0.0,995,,numeric,448
+12,315023,001051,Platform Transmitter ID number,e.g. Argos PTT,96,CCITT IA5,0.0,0.0,123456,,string,458
+13,315023,002148,Data collection and/or location system,,5,Code table,0.0,0.0,1,ARGOS,numeric,554
+14,315023,112000,Delayed replication of 12 descriptors,,0,Replication,,,,,,458
+15,315023,031001,Delayed descriptor replication factor,,8,Numeric,0.0,0.0,1,,numeric,458
+16,315023,008021,Time significance,"set to 26, time of last known position",5,Code table,0.0,0.0,26,,numeric,466
+17,315023,301011,"(Year, month, day)",,0,Sequence,,,,,numeric,471
 18,301011,004001,Year,,12,a,0.0,0.0,2020,,numeric,471
 19,301011,004002,Month,,4,mon,0.0,0.0,6,,numeric,483
 20,301011,004003,Day,,6,d,0.0,0.0,11,,numeric,487
-21,315013,301012,"(Hour, minute)",,0,Sequence,,,,,numeric,493
+21,315023,301012,"(Hour, minute)",,0,Sequence,,,,,numeric,493
 22,301012,004004,Hour,,5,h,0.0,0.0,18,,numeric,487
 23,301012,004005,Minute,,6,min,0.0,0.0,30,,numeric,492
-24,315013,301021,(Latitude / longitude (high accurracy)),,0,Sequence,,,,,numeric,498
+24,315023,301021,(Latitude / longitude (high accurracy)),,0,Sequence,,,,,numeric,498
 25,301021,005001,Latitude (high accuracy),,25,deg,5.0,-9000000.0,41.722,,numeric,498
 26,301021,006001,Longitude (high accuracy),,26,deg,5.0,-18000000.0,-71.4277,,numeric,523
-27,315013,001012,Direction of motion of moving observing platform,,9,degree true,0.0,0.0,272,,numeric,549
-28,315013,001014,Platform drift speed (high precision),,10,m/s,2.0,0.0,1.5,,numeric,558
-29,315013,033022,Quality of buoy satellite transmission,,2,Code table,0.0,0.0,0,Good,numeric,568
-30,315013,033023,Quality of buoy location,,2,Code table,0.0,0.0,0,Good,numeric,558
-31,315013,033027,Location quality class (range of radius of 66% confidence),,3,Code table,0.0,0.0,3,Radius < 250 m,numeric,560
-32,315013,007063,Depth below sea/water surface,,20,m,2.0,0.0,0,Surface,numeric,563
-33,315013,022045,Sea / Water Temperature,,19,K,3.0,0.0,284.34,,numeric,583
-34,315013,008021,Time significance,Set to missing / cancel,5,Code table,0.0,0.0,31,Missing,numeric,602
-35,315013,107000,Delayed replication of 7 descriptors,,0,Replication,,,,,,607
-36,315013,031001,Delayed descriptor replication factor,,8,Numeric,0.0,0.0,1,,numeric,607
-37,315013,301011,"(Year, month, day)",,0,Sequence,,,,,numeric,615
+27,315023,001012,Direction of motion of moving observing platform,,9,degree true,0.0,0.0,272,,numeric,549
+28,315023,001014,Platform drift speed (high precision),,10,m/s,2.0,0.0,1.5,,numeric,558
+29,315023,033022,Quality of buoy satellite transmission,,2,Code table,0.0,0.0,0,Good,numeric,568
+30,315023,033023,Quality of buoy location,,2,Code table,0.0,0.0,0,Good,numeric,558
+31,315023,033027,Location quality class (range of radius of 66% confidence),,3,Code table,0.0,0.0,3,Radius < 250 m,numeric,560
+32,315023,007063,Depth below sea/water surface,,20,m,2.0,0.0,0,Surface,numeric,563
+33,315023,022045,Sea / Water Temperature,,19,K,3.0,0.0,284.34,,numeric,583
+34,315023,008021,Time significance,Set to missing / cancel,5,Code table,0.0,0.0,31,Missing,numeric,602
+35,315023,107000,Delayed replication of 7 descriptors,,0,Replication,,,,,,607
+36,315023,031001,Delayed descriptor replication factor,,8,Numeric,0.0,0.0,1,,numeric,607
+37,315023,301011,"(Year, month, day)",,0,Sequence,,,,,numeric,615
 38,301011,004001,Year,,12,a,0.0,0.0,2020,,numeric,607
 39,301011,004002,Month,,4,mon,0.0,0.0,6,,numeric,619
 40,301011,004003,Day,,6,d,0.0,0.0,11,,numeric,623
-41,315013,301012,"(Hour, minute)",,0,Sequence,,,,,numeric,629
+41,315023,301012,"(Hour, minute)",,0,Sequence,,,,,numeric,629
 42,301012,004004,Hour,,5,h,0.0,0.0,18,,numeric,629
 43,301012,004005,Minute,,6,min,0.0,0.0,34,,numeric,634
-44,315013,301021,(Latitude / longitude (high accurracy)),,0,Sequence,,,,,numeric,640
+44,315023,301021,(Latitude / longitude (high accurracy)),,0,Sequence,,,,,numeric,640
 45,301021,005001,Latitude (high accuracy),,25,deg,5.0,-9000000.0,41.722,,numeric,640
 46,301021,006001,Longitude (high accuracy),,26,deg,5.0,-18000000.0,-71.4277,,numeric,640
-47,315013,001079,Unique identifier for the profile,Profile ID,64,CCITT IA5,0.0,0.0,profile1,,string,666
-48,315013,001023,Observation sequence number,Upcast number,9,Numeric,0.0,0.0,1,,numeric,730
-49,315013,022056,Direction of profile,Set to 0 (ascending / upwards),2,Code table,0.0,0.0,1,Downwards,numeric,739
-50,315013,306035,Temperature and salinity profile,,0,Sequence,,,,,numeric,741
+47,315023,001079,Unique identifier for the profile,Profile ID,64,CCITT IA5,0.0,0.0,profile1,,string,666
+48,315023,001023,Observation sequence number,Upcast number,9,Numeric,0.0,0.0,1,,numeric,730
+49,315023,022056,Direction of profile,Set to 0 (ascending / upwards),2,Code table,0.0,0.0,1,Downwards,numeric,739
+50,315023,306035,Temperature and salinity profile,,0,Sequence,,,,,numeric,741
 51,306035,112000,Delayed replication of 12 descriptors,,0,Replication,,,,,,741
 52,306035,031002,Extended delayed descriptor replication factor,,16,Numeric,0.0,0.0,2,,numeric,741
 53,306035,007062,Depth below sea/water surface,In metres,17,m,1.0,0.0,3,,numeric,757

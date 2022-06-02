@@ -19,13 +19,13 @@ section3:
   observed_flag: True
   compressed_flag: False
   descriptors:
-    - '315013'
+    - '315023'
 section4:
-  # 315013
+  # 315023
   # 301150 - WIGOS Identifier
   # 001125 - WIGOS identrifier series
   - bit_len: 0
-    fxy: '315013'
+    fxy: '315023'
     offset: null
     scale: null
     text: (Met-ocean observations from marine animal tags) (Sequence)
@@ -65,7 +65,7 @@ section4:
     type: string
     value: '37678'
     # Platform identification
-  - bit_len: 23
+  - bit_len: 24
     fxy: 001087
     offset: null
     scale: null
@@ -91,15 +91,14 @@ section4:
     scale: null
     text: Change width of CCITT IA5 field (Operator)
     type: operator
-
-    # Station type should always be 5 (Animal)
+    # Station type should always be 10 (Marine Animal)
   - bit_len: 5
     fxy: '003001'
     offset: null
     scale: null
     text: Surface Station Type (Code table)
     type: numeric
-    value: 5
+    value: 10
     # Always set to 995 marine animal
   - bit_len: 10
     fxy: '022067'
@@ -108,7 +107,6 @@ section4:
     text: Instrument type for water temperature/salinity profile measurement (Code table)
     type: numeric
     value: 995
-
     # Profile data
   - bit_len: 0
     fxy: '114000'
