@@ -191,7 +191,6 @@ def process_profile_description(profile_seq: pd.DataFrame, profile: pd.DataFrame
     lat = first_row.lat
     lon = first_row.lon
     profile_id = str(first_row.profile)
-    seq_no = first_row.profile
     direction = 0 if (profile.z.mean() < 0) else 1
     profile_seq['value'] = [
         np.nan,     # Sequence
@@ -205,7 +204,7 @@ def process_profile_description(profile_seq: pd.DataFrame, profile: pd.DataFrame
         lat,
         lon,
         profile_id,
-        seq_no,
+        np.nan,     # Upcast number
         direction,
     ]
     return profile_seq.to_dict(orient='records')
