@@ -47,19 +47,7 @@ def test_wildlife_computers_encoding_from_netcdf(parse_args, tempfile_fixture):
         file_id = f.read(4)
         assert file_id == b'BUFR'
         total_size = decoding.parse_unsigned_int(f.read(3), 24)
-        assert total_size == 29218
-        # f.seek(112)
-        # # Verify that there are 88 points in the trajectory
-        # delayed_descriptor_data = f.read(2)
-        # assert delayed_descriptor_data == b'\x82\xB1'
-        # # Pick out a random point and verify the location
-        # f.seek(257)
-        # location_data = f.read(8)
-        # assert location_data == b'\xCD\x54\xB0\x18\x10\xB0\xDF\x57'
-
-        # # Verify that there are 157 profiles
-        # f.seek(1862)
-        # assert f.read(2) == b'\xBF\x3A'
+        assert total_size == 28159
 
 
 @patch('bufrtools.encoding.wildlife_computers.parse_args')
@@ -78,19 +66,7 @@ def test_wildlife_computers_encoding_from_parquet(parse_args, tempfile_fixture):
         file_id = f.read(4)
         assert file_id == b'BUFR'
         total_size = decoding.parse_unsigned_int(f.read(3), 24)
-        assert total_size == 29218
-        # f.seek(112)
-        # # Verify that there are 88 points in the trajectory
-        # delayed_descriptor_data = f.read(2)
-        # assert delayed_descriptor_data == b'\x82\xB1'
-        # # Pick out a random point and verify the location
-        # f.seek(257)
-        # location_data = f.read(8)
-        # assert location_data == b'\xCD\x54\xB0\x18\x10\xB0\xDF\x57'
-
-        # # Verify that there are 157 profiles
-        # f.seek(1862)
-        # assert f.read(2) == b'\xBF\x3A'
+        assert total_size == 28159
 
 
 @patch('bufrtools.encoding.wildlife_computers.parse_args')
@@ -109,16 +85,4 @@ def test_wildlife_computers_encoding_from_csv(parse_args, tempfile_fixture):
         file_id = f.read(4)
         assert file_id == b'BUFR'
         total_size = decoding.parse_unsigned_int(f.read(3), 24)
-        assert total_size == 29218
-        # f.seek(112)
-        # # Verify that there are 88 points in the trajectory
-        # delayed_descriptor_data = f.read(2)
-        # assert delayed_descriptor_data == b'\x82\xB1'
-        # # Pick out a random point and verify the location
-        # f.seek(257)
-        # location_data = f.read(8)
-        # assert location_data == b'\xCD\x54\xB0\x18\x10\xB0\xDF\x57'
-
-        # # Verify that there are 157 profiles
-        # f.seek(1862)
-        # assert f.read(2) == b'\xBF\x3A'
+        assert total_size == 28159
