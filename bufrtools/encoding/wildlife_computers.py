@@ -62,7 +62,7 @@ def drift(df: pd.DataFrame) -> np.ndarray:
     array will be 0, as it can not be effectively calculated.
     """
     # Convert to epoch seconds
-    t = df.groupby('profile')['time'].first().astype('int64') // 1e9
+    t = df.groupby('profile')['time'].first().view('int64') // 1e9
     dt = np.diff(t)
 
     x = df.groupby('profile')['lon'].first() * np.pi / 180
@@ -85,7 +85,8 @@ def get_trajectory_sequences(df: pd.DataFrame) -> List[dict]:
     y = df.groupby('profile')['lat'].first() * np.pi / 180
 
     theta = azimuth(x.values, y.values) * 180 / np.pi
-    theta = (theta + 360) % 360
+    theta_mask = ~np.isnan(theta)
+    theta[theta_mask] = (theta[theta_mask] + 360) % 360
     speed = drift(df)
 
     trajectory = pd.DataFrame({
