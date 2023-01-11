@@ -58,7 +58,7 @@ ClassNo,ClassName_en,FXY,ElementName_en,Note_en,BUFR_Unit,BUFR_Scale,BUFR_Refere
 01,Identification,001083,Radiosonde release number,(see Note 12),Numeric,0,0,3,Numeric,0,1,Operational
 01,Identification,001085,Observing platform manufacturer's model,,CCITT IA5,0,0,160,Character,0,20,Operational
 01,Identification,001086,Observing platform manufacturer's serial number,,CCITT IA5,0,0,256,Character,0,32,Operational
-01,Identification,001087,WMO marine observing platform extended identifier,,Numeric,0,0,23,Numeric,0,7,Operational
+01,Identification,001087,WMO marine observing platform extended identifier,,Numeric,0,0,24,Numeric,0,7,Operational
 01,Identification,001090,Technique for making up initial perturbations,,Code table,0,0,8,Code table,0,3,Operational
 01,Identification,001091,Ensemble member number,,Numeric,0,0,10,Numeric,0,4,Operational
 01,Identification,001092,Type of ensemble forecast,,Code table,0,0,8,Code table,0,3,Operational

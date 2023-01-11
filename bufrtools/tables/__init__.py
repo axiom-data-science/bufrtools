@@ -155,14 +155,14 @@ def table_d_lookup(f, x, y, parent=None):
         subtitle = ''
         sub_references.append((fxy_str, fxy_str, title, subtitle))
         parent = fxy_str
-    for index, row in df.iterrows():
+    for _, row in df.iterrows():
         ref = row['FXY2']
         title = row['ElementName_en']
         subtitle = row['ElementDescription_en']
         ref_f, ref_x, ref_y = parse_ref(ref)
         if ref_f == 0:
             sub_references.append((parent, ref, title, subtitle))
-        if ref_f == 2 and ref_x == 8:
+        if ref_f == 2 and ref_x in [1, 8]:
             sub_references.append((parent, ref, title, subtitle))
         if ref_f == 1:
             sub_references.append((parent, ref, title, subtitle))
@@ -183,6 +183,26 @@ def combine_references(references) -> pd.DataFrame:
                 'Parent': parent,
                 'FXY': f'{f}{x:02d}{y:03d}',
                 'ElementName_en': f'Operator Change CCITT IA5 width to {8 * y}',
+                'BUFR_DataWidth_Bits': 0,
+                'BUFR_Unit': 'Operator',
+                'Title': title,
+                'Subtitle': subtitle,
+            }]))
+        elif f == 2 and x == 1 and y == 129:
+            frames.append(pd.DataFrame([{
+                'Parent': parent,
+                'FXY': f'{f}{x:02d}{y:03d}',
+                'ElementName_en': 'Change data width',
+                'BUFR_DataWidth_Bits': 0,
+                'BUFR_Unit': 'Operator',
+                'Title': title,
+                'Subtitle': subtitle,
+            }]))
+        elif f == 2 and x == 1 and y == 0:
+            frames.append(pd.DataFrame([{
+                'Parent': parent,
+                'FXY': f'{f}{x:02d}{y:03d}',
+                'ElementName_en': 'Cancel change data width',
                 'BUFR_DataWidth_Bits': 0,
                 'BUFR_Unit': 'Operator',
                 'Title': title,
@@ -230,4 +250,4 @@ def combine_references(references) -> pd.DataFrame:
             df['Title'] = title
             df['Subtitle'] = subtitle
             frames.append(df)
-    return pd.concat(frames)
+    return pd.concat(frames, sort=True)

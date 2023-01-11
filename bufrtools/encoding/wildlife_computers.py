@@ -29,7 +29,7 @@ def get_section1() -> dict:
         'sub_category': 4,           # subsurface float (profile)
         'local_category': 0,         # Ideally something specifies this as a marine mammal
                                      # animal tag
-        'master_table_version': 37,
+        'master_table_version': 39,
         'local_table_version': 255,  # Unknown
         'year': now.year,
         'month': now.month,
@@ -48,7 +48,7 @@ def get_section3() -> dict:
         'number_of_subsets': 1,
         'observed_flag': True,
         'compressed_flag': False,
-        'descriptors': ['315013'],
+        'descriptors': ['315023'],
     }
     return section3
 
@@ -62,7 +62,7 @@ def drift(df: pd.DataFrame) -> np.ndarray:
     array will be 0, as it can not be effectively calculated.
     """
     # Convert to epoch seconds
-    t = df.groupby('profile')['time'].first().astype('int64') // 1e9
+    t = df.groupby('profile')['time'].first().view('int64') // 1e9
     dt = np.diff(t)
 
     x = df.groupby('profile')['lon'].first() * np.pi / 180
@@ -85,7 +85,8 @@ def get_trajectory_sequences(df: pd.DataFrame) -> List[dict]:
     y = df.groupby('profile')['lat'].first() * np.pi / 180
 
     theta = azimuth(x.values, y.values) * 180 / np.pi
-    theta = (theta + 360) % 360
+    theta_mask = ~np.isnan(theta)
+    theta[theta_mask] = (theta[theta_mask] + 360) % 360
     speed = drift(df)
 
     trajectory = pd.DataFrame({
@@ -116,8 +117,8 @@ def get_trajectory_sequences(df: pd.DataFrame) -> List[dict]:
         'bit_len': 8,
         'value': len(trajectory)
     })
-    trajectory_seq = get_sequence_description('315013').iloc[16:35]
-    for i, row in trajectory.iterrows():
+    trajectory_seq = get_sequence_description('315023').iloc[18:37]
+    for _, row in trajectory.iterrows():
         for seq in process_trajectory(trajectory_seq.copy(), row):
             sequence.append(seq)
     return sequence
@@ -156,9 +157,9 @@ def process_trajectory(trajectory_seq: pd.DataFrame, row) -> List[dict]:
 
 def get_profile_sequence(df: pd.DataFrame) -> List[dict]:
     """Returns the sequences for the profiles."""
-    parent_seq = get_sequence_description('315013')
-    profile_description_seq = parent_seq.iloc[37:50]
-    profile_data_seq = parent_seq.iloc[53:65]
+    parent_seq = get_sequence_description('315023')
+    profile_description_seq = parent_seq.iloc[39:52]
+    profile_data_seq = parent_seq.iloc[55:67]
     sequence = []
     sequence.append({
         'fxy': '031001',
@@ -191,7 +192,6 @@ def process_profile_description(profile_seq: pd.DataFrame, profile: pd.DataFrame
     lat = first_row.lat
     lon = first_row.lon
     profile_id = str(first_row.profile)
-    seq_no = first_row.profile
     direction = 0 if (profile.z.mean() < 0) else 1
     profile_seq['value'] = [
         np.nan,     # Sequence
@@ -205,7 +205,7 @@ def process_profile_description(profile_seq: pd.DataFrame, profile: pd.DataFrame
         lat,
         lon,
         profile_id,
-        seq_no,
+        np.nan,     # Upcast number
         direction,
     ]
     return profile_seq.to_dict(orient='records')
@@ -279,9 +279,11 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
     if wmo is None:
         wmo = 0
 
-    platform_id_sequence = get_sequence_description('315013')[6:14]
+    platform_id_sequence = get_sequence_description('315023')[6:16]
     platform_id_sequence['value'] = [
+        np.nan,         # 201129,Change data width,,,Operational  # noqa
         wmo,            # 001087,WMO marine observing platform extended identifier ,WMO number where assigned,,Operational # noqa
+        np.nan,         # 201000,Change data width,Cancel,,Operational
         np.nan,         # 208032,Change width of CCITT IA5 ,change width to 32 characters,,Operational # noqa
         uuid[:32],      # 001019,Ship or mobile land station identifier ,"Platform ID, e.g. ct145-933-BAT2-18 (max 32 characters)",,Operational # noqa
         np.nan,         # 208000,Change width of CCITT IA5 ,Cancel change width,,Operational # noqa

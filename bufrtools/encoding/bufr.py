@@ -140,6 +140,12 @@ def encode_section4(message: dict, context: dict):
                     override_bitlength = y * 8
                 else:
                     override_bitlength = None
+            # This is a cancel code
+            if (f, x, y) == (2, 1, 0):
+                override_bitlength = None
+            # Special case or is 129 always a change to 24?
+            if (f, x, y) == (2, 1, 129):
+                override_bitlength = 24
             continue
         if seq['bit_len'] < 1:
             # Skip 0-length sections, they're for information purposes only
@@ -168,7 +174,7 @@ def encode_section4(message: dict, context: dict):
             bitlen = seq['bit_len']
             if override_bitlength:
                 bitlen = override_bitlength
-            write_ascii(write_buf, seq['value'], bit_offset, bitlen)
+            write_ascii(write_buf, str(seq['value']), bit_offset, bitlen)
             bit_offset += seq['bit_len']
 
     write_buf.seek(0)
