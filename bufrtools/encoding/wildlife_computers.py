@@ -19,6 +19,61 @@ from bufrtools.util.gis import azimuth, haversine_distance
 from bufrtools.util.parse import parse_input_to_dataframe
 
 
+def qartod_to_wmoqc(flag: int) -> int:
+    """
+    Convert a QARTOD quality flag to a WMO quality flag.
+    https://library.wmo.int/doc_num.php?explnum_id=11283
+
+    QARTOD Flags
+
+    1 = Good
+    2 = Not evaluated
+    3 = Questionable / Suspect
+    4 = Bad
+    9 = Missing data
+
+    WMO Flags
+    0 = Unqualified
+    1 = Correct value (all checks passed)
+    2 = Probably good but value inconsistent with statistics (differ from climatology)
+    3 = Probably bad (spike, gradient, etc., if other tests passed)
+    4 = Bad value, impossible value (out of scale, vertical instability, constant profile)
+    5 = Value modified during quality control
+    6 = Reserved
+    7 = Reserved
+    8 = Interpolated value
+    9 = Good for operational use; caution; check literature for other uses,
+    10 = Reserved
+    11 = Reserved
+    12 = Reserved
+    13 = Reserved
+    14 = Reserved
+    15 = Missing value
+
+    Args:
+        flag (int): QARTOD quality flag
+
+    Returns:
+        int: WMO Quality flag
+    """
+    if flag == 1:
+        return 1
+
+    elif flag == 2:
+        return 0
+
+    elif flag == 3:
+        return 3
+
+    elif flag == 4:
+        return 4
+
+    elif flag == 9:
+        return 15
+
+    return 0
+
+
 def get_section1() -> dict:
     """Returns the section1 part of the message to be encoded."""
     now = datetime.utcnow()
@@ -226,28 +281,36 @@ def process_profile_data(profile_seq: pd.DataFrame, profile: pd.DataFrame) -> Li
     for i, row in profile.iterrows():
         seq = profile_seq.copy()
 
+        # Depth
+        depth_qc = 0
+
         # Get pressure
         pressure = getattr(row, 'pressure', np.nan)
         pressure *= 10000  # Convert from dbar to Pa
+        pressure_qc = qartod_to_wmoqc(getattr(row, 'pressure_qartod_gross_range_test', 0))
+
         # Get temperature
         temperature = getattr(row, 'temperature', np.nan)
         temperature += 273.15  # Convert from deg_C to Kelvin
+        temperature_qc = qartod_to_wmoqc(getattr(row, 'temperature_qartod_gross_range_test', 0))
+
         # Get salinity
         salinity = getattr(row, 'salinity', np.nan)
+        salinity_qc = qartod_to_wmoqc(getattr(row, 'salinity_qartod_gross_range_test', 0))
 
         seq['value'] = [
             row.z if row.z > 0 else 0,  # Depth below sea water
             13,                         # Depth at a level
-            0,                          # Unqualified
+            depth_qc,                   # Depth QC flag
             pressure,                   # Pressure
             10,                         # Pressure at a level
-            0,                          # Unqualified
+            pressure_qc,                # Pressure QC flag
             temperature,                # Temperature in K
             11,                         # Temperature at a depth
-            0,                          # Unqualified
+            temperature_qc,             # Temperature QC flag
             salinity,                   # Salinity
             12,                         # Salinity at a depth
-            0,                          # Unqualified
+            salinity_qc,                # Salinity QC flag
         ]
         sequence.extend(seq.to_dict(orient='records'))
     return sequence
