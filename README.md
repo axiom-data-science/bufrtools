@@ -40,6 +40,19 @@ Usage:
 python bufrtools/encoding/wildlife_computers.py -o <output bufr file> <netCDF path>
 ```
 
+Example to produce bufr message for the netCDF file in the examples folder:
+```
+python bufrtools/encoding/wildlife_computers.py -o examples/profile-example.bufr examples/profile.nc
+```
+
+We can see that the file is a BUFR file by inspecting the first 4 bytes:
+
+```
+hexdump -C -n4 examples/output.bufr
+00000000  42 55 46 52                                       |BUFR|
+00000004
+```
+
 The following table contains the expanded sequence of descriptors for temperature salinity profiles and trajectories originating from marine animal tags.
 
 The source of this information is the published [Manual on WMO Codes](https://library.wmo.int/doc_num.php?explnum_id=10722).
