@@ -61,14 +61,14 @@ def drift(df: pd.DataFrame) -> np.ndarray:
     travel no distance over no time will have a drift of zero. The last element of the returned
     array will be 0, as it can not be effectively calculated.
     """
-    # Convert to epoch seconds
-    t = df.groupby('profile')['time'].first().view('int64') // 1e9
-    dt = np.diff(t)
+    t = df.groupby('profile')['time'].first()
+    # Calculate time differences and convert to seconds
+    dt = np.diff(t).astype('timedelta64[s]').view('int64')
 
     x = df.groupby('profile')['lon'].first() * np.pi / 180
     y = df.groupby('profile')['lat'].first() * np.pi / 180
     ds = haversine_distance(x.values, y.values)
-    ds_dt = np.zeros_like(t)
+    ds_dt = np.zeros_like(t.view('float64'))
     for i in range(ds.shape[0]):
         if np.abs(ds[i]) < 0.0001 and np.abs(dt[i]) < 0.0001:
             ds_dt[i] = 0
