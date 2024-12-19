@@ -9,3 +9,4 @@ dependencies:
   - pandas
   - pocean-core>=1.9.3
   - pyarrow
+  - setuptools
