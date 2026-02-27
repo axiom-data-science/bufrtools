@@ -8,7 +8,7 @@ import sys
 from typing import List
 from pathlib import Path
 from argparse import Namespace, ArgumentParser
-from datetime import datetime
+from bufrtools.util.datetime import utcnow
 
 import numpy as np
 import pandas as pd
@@ -21,7 +21,7 @@ from bufrtools.util.parse import parse_input_to_dataframe
 
 def get_section1() -> dict:
     """Returns the section1 part of the message to be encoded."""
-    now = datetime.utcnow()
+    now = utcnow()
     section1 = {
         'originating_centre': 177,
         'sub_centre': 0,
@@ -68,7 +68,7 @@ def drift(df: pd.DataFrame) -> np.ndarray:
     x = df.groupby('profile')['lon'].first() * np.pi / 180
     y = df.groupby('profile')['lat'].first() * np.pi / 180
     ds = haversine_distance(x.values, y.values)
-    ds_dt = np.zeros_like(t.view('float64'))
+    ds_dt = np.zeros(len(t), dtype='float64')
     for i in range(ds.shape[0]):
         if np.abs(ds[i]) < 0.0001 and np.abs(dt[i]) < 0.0001:
             ds_dt[i] = 0
