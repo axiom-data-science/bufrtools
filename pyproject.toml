@@ -33,6 +33,10 @@ filename = "pyproject.toml"
 search = 'version = "{current_version}"'
 replace = 'version = "{new_version}"'
 
+[tool.mypy]
+ignore_missing_imports = true
+warn_unused_configs = true
+
 [tool.hatch.build.targets.wheel]
 include = [
     "bufrtools/**/*.py",

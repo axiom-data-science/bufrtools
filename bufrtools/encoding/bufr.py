@@ -11,7 +11,12 @@ from bufrtools.util.bitmath import shift_uint, encode_uint
 
 
 def encode_bufr(message: dict, context: dict):
-    """Encodes a BUFR file based on the contents of message."""
+    """Encodes a complete BUFR message and writes it into ``context['buf']``.
+
+    ``message`` must contain keys ``section1``, ``section3``, and ``section4``.
+    ``context`` may be empty; a fresh ``BytesIO`` buffer is created if ``'buf'`` is absent.
+    After this call ``context['buf']`` is rewound to position 0 and ready to read.
+    """
     if 'buf' not in context:
         context['buf'] = io.BytesIO()
     encode_section0(message, context)
@@ -195,7 +200,7 @@ def encode_section5(context: dict):
 
 
 def write_uint(buf, value, bit_offset, bitlen):
-    """Writes an unsgined integer to the buffer at `bit_offset` that occupies `bitlen` bits."""
+    """Writes an unsigned integer to the buffer at `bit_offset` that occupies `bitlen` bits."""
     byte_start = bit_offset // 8
     r = bit_offset % 8
     byte_len = math.ceil((bitlen + r) / 8)

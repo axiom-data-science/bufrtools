@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 """Module for basic and general parsing functions."""
 from pathlib import Path
+from typing import Any, Dict, Tuple
 
 import cftime
 import pandas as pd
@@ -17,7 +18,8 @@ def parse_ref(fxy) -> tuple:
     return f, x, y
 
 
-def load_csv(ipt: Path) -> pd.DataFrame:
+def load_csv(ipt: Path) -> Tuple[pd.DataFrame, Dict[str, Any]]:
+    """Loads a CSV file and returns a (DataFrame, metadata) tuple. Metadata is always empty."""
     df = pd.read_csv(ipt)
     df['time'] = pd.to_datetime(df.time)
     return (
@@ -26,14 +28,19 @@ def load_csv(ipt: Path) -> pd.DataFrame:
     )
 
 
-def load_parquet(ipt: Path) -> pd.DataFrame:
+def load_parquet(ipt: Path) -> Tuple[pd.DataFrame, Dict[str, Any]]:
+    """Loads a Parquet file and returns a (DataFrame, metadata) tuple. Metadata is always empty."""
     return (
         pd.read_parquet(ipt),
         {}
     )
 
 
-def load_netcdf(ipt: Path) -> pd.DataFrame:
+def load_netcdf(ipt: Path) -> Tuple[pd.DataFrame, Dict[str, Any]]:
+    """Loads a CF-compliant netCDF file via pocean-core and returns a (DataFrame, metadata) tuple.
+
+    Metadata contains ``uuid`` and ``ptt`` extracted from the dataset's global attributes.
+    """
     ds = CFDataset.load(str(ipt))
     axes = dict(
         t='time',
@@ -65,7 +72,13 @@ def load_netcdf(ipt: Path) -> pd.DataFrame:
     )
 
 
-def parse_input_to_dataframe(ipt: Path) -> pd.DataFrame:
+def parse_input_to_dataframe(ipt: Path) -> Tuple[pd.DataFrame, Dict[str, Any]]:
+    """Loads a dataset file and returns a (DataFrame, metadata) tuple.
+
+    Accepts a ``pathlib.Path`` to a CSV, Parquet, or netCDF file, or a ``DataFrame`` directly.
+    Loaders are tried in order (CSV → Parquet → netCDF); the first that succeeds is used.
+    Raises ``ValueError`` if no loader can handle the input.
+    """
     # Shortcut to avoid needing a file at all
     if isinstance(ipt, pd.DataFrame):
         return (ipt, {})

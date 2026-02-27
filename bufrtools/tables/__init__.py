@@ -4,11 +4,12 @@
 import csv
 import copy
 import codecs
+from typing import Optional
 
 try:
     from importlib.resources import files as _files
 except ImportError:
-    from importlib_resources import files as _files
+    from importlib_resources import files as _files  # type: ignore[no-redef]
 
 import numpy as np
 import pandas as pd
@@ -39,7 +40,7 @@ def get_code_table(fxy_str: str) -> pd.DataFrame:
     return df
 
 
-def get_code_table_figure(fxy_str: str, code_figure: int) -> dict:
+def get_code_table_figure(fxy_str: str, code_figure: int) -> Optional[dict]:
     """Returns the code table row for the given FXXYYY string."""
     f, x, y = parse_ref(fxy_str)
     filename = f'BUFRCREX_CodeFlag_en_{x:02d}.csv'
@@ -60,6 +61,7 @@ def get_code_table_figure(fxy_str: str, code_figure: int) -> dict:
                         return row
                 except ValueError:
                     pass
+    return None
 
 
 def get_summary(fxy_str: str) -> pd.DataFrame:
@@ -106,8 +108,8 @@ def get_sequence_description(fxy_str: str) -> pd.DataFrame:
             typename = 'replication'
         else:
             typename = 'numeric'
-        summary.iloc[i, summary.columns.get_loc('type')] = typename
-        summary.iloc[i, summary.columns.get_loc('text')] = title
+        summary.at[i, 'type'] = typename
+        summary.at[i, 'text'] = title
     return summary
 
 

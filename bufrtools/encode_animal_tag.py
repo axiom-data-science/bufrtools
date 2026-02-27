@@ -30,7 +30,7 @@ def parse_args(argv: List[str]) -> Namespace:
 
 
 def main():
-    """To fill out at some point."""
+    """Encode a BUFR message from a YAML or JSON descriptor file."""
     args = parse_args(sys.argv[1:])
     descriptor = args.descriptor
     if descriptor.suffix == '.yml':
