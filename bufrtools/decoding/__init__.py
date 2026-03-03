@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 """Package for some decoding utilities."""
 import logging
+from typing import Optional
 
 from bufrtools.tables import get_code_table_figure
 
@@ -34,7 +35,7 @@ def decode_empty(context: dict,
                  bit_len: int,
                  text: str,
                  fxy: str,
-                 value: str = None) -> dict:
+                 value: Optional[str] = None) -> dict:
     """Returns a tag to represent an empty space or missing value."""
     start = bit_offset // 8
     r = bit_offset % 8
@@ -56,9 +57,9 @@ def decode_numeric(data: bytes,
                    bit_offset: int,
                    bit_len: int,
                    text: str,
-                   scale: float = None,
-                   offset: float = None,
-                   fxy: str = None,
+                   scale: Optional[float] = None,
+                   offset: Optional[float] = None,
+                   fxy: Optional[str] = None,
                    code_table: bool = False) -> dict:
     """Decodes a numeric data field."""
     start = bit_offset // 8
@@ -74,10 +75,11 @@ def decode_numeric(data: bytes,
     if scale is not None:
         value = value / (10 ** scale)
     log.debug(f'Decoded value {value}')
-    if code_table:
+    if code_table and fxy is not None:
         try:
             code_figure = get_code_table_figure(fxy, int(value))
-            value = f'{value:0.0f} ({code_figure["EntryName_en"]})'
+            if code_figure is not None:
+                value = f'{value:0.0f} ({code_figure["EntryName_en"]})'
         except Exception:
             log.warning(f'Unable to find code table value for {fxy}')
     return {
@@ -96,7 +98,7 @@ def decode_ccit(data: bytes,
                 bit_offset: int,
                 bit_len: int,
                 text: str,
-                fxy: str = None) -> dict:
+                fxy: Optional[str] = None) -> dict:
     """Decodes an ASCII field."""
     start = bit_offset // 8
     r = bit_offset % 8

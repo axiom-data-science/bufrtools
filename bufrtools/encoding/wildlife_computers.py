@@ -8,7 +8,7 @@ import sys
 from typing import List
 from pathlib import Path
 from argparse import Namespace, ArgumentParser
-from datetime import datetime
+from bufrtools.util.datetime import utcnow
 
 import numpy as np
 import pandas as pd
@@ -21,7 +21,7 @@ from bufrtools.util.parse import parse_input_to_dataframe
 
 def get_section1() -> dict:
     """Returns the section1 part of the message to be encoded."""
-    now = datetime.utcnow()
+    now = utcnow()
     section1 = {
         'originating_centre': 177,
         'sub_centre': 0,
@@ -68,7 +68,7 @@ def drift(df: pd.DataFrame) -> np.ndarray:
     x = df.groupby('profile')['lon'].first() * np.pi / 180
     y = df.groupby('profile')['lat'].first() * np.pi / 180
     ds = haversine_distance(x.values, y.values)
-    ds_dt = np.zeros_like(t.view('float64'))
+    ds_dt = np.zeros(len(t), dtype='float64')
     for i in range(ds.shape[0]):
         if np.abs(ds[i]) < 0.0001 and np.abs(dt[i]) < 0.0001:
             ds_dt[i] = 0
@@ -131,7 +131,7 @@ def process_trajectory(trajectory_seq: pd.DataFrame, row) -> List[dict]:
     temperature = getattr(row, 'temperature', np.nan)
     temperature += 273.15  # Convert from deg_C to Kelvin
 
-    trajectory_seq['value'] = [
+    trajectory_seq['value'] = [  # type: ignore[call-overload]
         26,                          # Last known position
         np.nan,                      # Sequence
         row.time.year,
@@ -193,7 +193,7 @@ def process_profile_description(profile_seq: pd.DataFrame, profile: pd.DataFrame
     lon = first_row.lon
     profile_id = str(first_row.profile)
     direction = 0 if (profile.z.mean() < 0) else 1
-    profile_seq['value'] = [
+    profile_seq['value'] = [  # type: ignore[call-overload]
         np.nan,     # Sequence
         year,
         month,
@@ -235,7 +235,7 @@ def process_profile_data(profile_seq: pd.DataFrame, profile: pd.DataFrame) -> Li
         # Get salinity
         salinity = getattr(row, 'salinity', np.nan)
 
-        seq['value'] = [
+        seq['value'] = [  # type: ignore[call-overload]
             row.z if row.z > 0 else 0,  # Depth below sea water
             13,                         # Depth at a level
             0,                          # Unqualified
@@ -249,7 +249,7 @@ def process_profile_data(profile_seq: pd.DataFrame, profile: pd.DataFrame) -> Li
             12,                         # Salinity at a depth
             0,                          # Unqualified
         ]
-        sequence.extend(seq.to_dict(orient='records'))
+        sequence.extend(seq.to_dict(orient='records'))  # type: ignore[arg-type]
     return sequence
 
 
@@ -263,14 +263,14 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
     wigos_issue_number = 0       # Placeholder
 
     wigos_sequence = get_sequence_description('301150')
-    wigos_sequence['value'] = [
+    wigos_sequence['value'] = [  # type: ignore[assignment]
         np.nan,                   # Sequence
         wigos_identifier_series,  # 001125,WIGOS identifier series,,,Operational
         wigos_issuer,             # 001126,WIGOS issuer of identifier,,,Operational
         wigos_issue_number,       # 001127,WIGOS issue number,,,Operational
         wigos_local_identifier,   # 001128,WIGOS local identifier (character),,,Operational
     ]
-    records.extend(wigos_sequence.to_dict(orient='records'))
+    records.extend(wigos_sequence.to_dict(orient='records'))  # type: ignore[arg-type]
 
     uuid = kwargs.pop('uuid')
     ptt = kwargs.pop('ptt')
@@ -280,7 +280,7 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
         wmo = 0
 
     platform_id_sequence = get_sequence_description('315023')[6:16]
-    platform_id_sequence['value'] = [
+    platform_id_sequence['value'] = [  # type: ignore[call-overload]
         np.nan,         # 201129,Change data width,,,Operational  # noqa
         wmo,            # 001087,WMO marine observing platform extended identifier ,WMO number where assigned,,Operational # noqa
         np.nan,         # 201000,Change data width,Cancel,,Operational
@@ -292,7 +292,7 @@ def get_section4(df: pd.DataFrame, **kwargs) -> List[dict]:
         ptt[:12],       # 001051,Platform transmitter ID number,e.g. Argos PTT,,Operational # noqa
         1,              # 002148,Data collection and/or location system,,,Operational # noqa
     ]
-    records.extend(platform_id_sequence.to_dict(orient='records'))
+    records.extend(platform_id_sequence.to_dict(orient='records'))  # type: ignore[arg-type]
     # WC profiles don't have enough data to fill in the trajectory portion of the BUFR, so we'll
     records.extend(get_trajectory_sequences(df))
     records.extend(get_profile_sequence(df))

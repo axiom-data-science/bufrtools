@@ -10,55 +10,33 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
       with:
         python-version: 3.x
-    - uses: pre-commit/action@v2.0.0
+    - uses: pre-commit/action@v3.0.0
 
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.12"]
-        os: [ubuntu-latest]
-
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
-    - name: Setup Conda
-      uses: s-weigand/setup-conda@v1
-      with:
-        activate-conda: false
-        conda-channels: conda-forge
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
 
-    - name: Python ${{ matrix.python-version }}
-      shell: bash -l {0}
-      run: |
-        conda create --name TEST python=${{ matrix.python-version }} --file requirements.txt --file requirements-dev.txt
-        source activate TEST
-        pip install -e . --no-deps --force-reinstall
+    - name: Install tox
+      run: uv tool install tox --with tox-uv
 
-    - name: Debug conda
-      shell: bash -l {0}
-      run: |
-        source activate TEST
-        conda info --all
-        conda list
-
-    - name: Tests
-      shell: bash -l {0}
-      run: |
-        source activate TEST
-        pytest --disable-warnings
+    - name: Run tests
+      run: tox run
 
   pypi-build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: 3.x
 

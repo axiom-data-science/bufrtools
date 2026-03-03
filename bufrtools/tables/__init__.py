@@ -4,8 +4,12 @@
 import csv
 import copy
 import codecs
+from typing import Optional
 
-import pkg_resources
+try:
+    from importlib.resources import files as _files
+except ImportError:
+    from importlib_resources import files as _files  # type: ignore[no-redef]
 
 import numpy as np
 import pandas as pd
@@ -17,7 +21,7 @@ def get_code_table(fxy_str: str) -> pd.DataFrame:
     f, x, y = parse_ref(fxy_str)
     filename = f'BUFRCREX_CodeFlag_en_{x:02d}.csv'
     utf8_reader = codecs.getreader('utf-8')
-    with pkg_resources.resource_stream('bufrtools.tables', f'data/{filename}') as f:
+    with _files('bufrtools.tables').joinpath(f'data/{filename}').open('rb') as f:
         reader = csv.DictReader(utf8_reader(f))
         rows = []
         for row in reader:
@@ -36,12 +40,12 @@ def get_code_table(fxy_str: str) -> pd.DataFrame:
     return df
 
 
-def get_code_table_figure(fxy_str: str, code_figure: int) -> dict:
+def get_code_table_figure(fxy_str: str, code_figure: int) -> Optional[dict]:
     """Returns the code table row for the given FXXYYY string."""
     f, x, y = parse_ref(fxy_str)
     filename = f'BUFRCREX_CodeFlag_en_{x:02d}.csv'
     utf8_reader = codecs.getreader('utf-8')
-    with pkg_resources.resource_stream('bufrtools.tables', f'data/{filename}') as f:
+    with _files('bufrtools.tables').joinpath(f'data/{filename}').open('rb') as f:
         reader = csv.DictReader(utf8_reader(f))
         for row in reader:
             if fxy_str != row['FXY']:
@@ -57,6 +61,7 @@ def get_code_table_figure(fxy_str: str, code_figure: int) -> dict:
                         return row
                 except ValueError:
                     pass
+    return None
 
 
 def get_summary(fxy_str: str) -> pd.DataFrame:
@@ -89,7 +94,7 @@ def get_sequence_description(fxy_str: str) -> pd.DataFrame:
         'Parent': 'parent',
         'BUFR_DataWidth_Bits': 'bit_len',
     }, inplace=True)
-    summary['type'] = np.nan
+    summary['type'] = None
     summary['text'] = summary['Title']
     for i, row in summary.iterrows():
         f, x, y = parse_ref(row['fxy'])
@@ -103,15 +108,15 @@ def get_sequence_description(fxy_str: str) -> pd.DataFrame:
             typename = 'replication'
         else:
             typename = 'numeric'
-        summary.iloc[i, summary.columns.get_loc('type')] = typename
-        summary.iloc[i, summary.columns.get_loc('text')] = title
+        summary.at[i, 'type'] = typename
+        summary.at[i, 'text'] = title
     return summary
 
 
 def get_table_a() -> pd.DataFrame:
     """Returns the Table A contents."""
     filename = 'BUFR_TableA_en.csv'
-    stream = pkg_resources.resource_stream('bufrtools.tables', f'data/{filename}')
+    stream = _files('bufrtools.tables').joinpath(f'data/{filename}').open('rb')
     df = pd.read_csv(stream)
     return df
 
@@ -121,7 +126,7 @@ def get_table_d(f, x, y) -> pd.DataFrame:
     assert f == 3
     fxy_str = f'{f}{x:02d}{y:03d}'
     filename = f'BUFR_TableD_en_{x:02d}.csv'
-    stream = pkg_resources.resource_stream('bufrtools.tables', f'data/{filename}')
+    stream = _files('bufrtools.tables').joinpath(f'data/{filename}').open('rb')
     df = pd.read_csv(stream, dtype={'FXY1': str, 'FXY2': str})
     df = df[df['FXY1'] == fxy_str]
     return df
@@ -132,7 +137,7 @@ def get_table_b(f, x, y) -> pd.DataFrame:
     assert f == 0
     fxy_str = f'{f}{x:02d}{y:03d}'
     filename = f'BUFRCREX_TableB_en_{x:02d}.csv'
-    stream = pkg_resources.resource_stream('bufrtools.tables', f'data/{filename}')
+    stream = _files('bufrtools.tables').joinpath(f'data/{filename}').open('rb')
     df = pd.read_csv(stream, dtype={'FXY': str})
     df = df[df['FXY'] == fxy_str]
     return df
