@@ -20,6 +20,12 @@ dependencies = [
     "pyyaml",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "pytest",
+]
+
 [project.urls]
 Homepage = "https://github.com/axiom-data-science/bufrtools"
 

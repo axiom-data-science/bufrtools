@@ -7,23 +7,68 @@ A suite of utilities and scripts to forge a BUFR file, or decode one.
 Installation
 ------------
 
+To install the package with pip:
+
+```
+pip install git+https://github.com/axiom-data-science/bufrtools.git
+```
+
+Installation with conda
+-----------------------
+
 `bufrtools` is available in the `axiom-data-science` channel on anaconda.org.
 
 ```
 conda install -c axiom-data-science bufrtools
 ```
 
+> [!WARNING]
+> For installations after 2026-01-01, we recommend installing directly from the
+> github repo tags. The `axiom-data-science` channel version of `bufrtools` will
+> be deprecated in favor of `pypi` or other package offerings.
+
+
 Development
 -----------
 
-It is advisable to use conda for development and usage of this project, although it's not strictly
-necessary. This README assumes the use of conda, however.
+It is advisable to use `uv` for development and usage of this project, although it's not strictly
+necessary. This README assumes the use of uv, however.
 
+To get started with `uv`: [Installing uv](https://docs.astral.sh/uv/getting-started/installation/)
 
-To install the environment:
+To install a new development virtual environment in this project's folder with `uv` you can use:
 
 ```
-conda env create -f environment.yml
+uv venv
+uv pip install -e ".[dev]"
+source .venv/bin/activate
+```
+
+Testing
+-------
+
+Because this is a library with specific client environments that must be
+maintained and supported, this project uses `tox` to test various combinations
+of environments.
+
+To install tox:
+
+```
+pip install tox tox-uv
+# or
+uv pip install tox tox-uv
+```
+
+To install them as a global tool in the `uv` ecosystem:
+
+```
+uv tool install tox --with tox-uv
+```
+
+Once installed the battery of tests can be executed with:
+
+```
+tox run
 ```
 
 
